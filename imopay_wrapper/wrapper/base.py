@@ -73,7 +73,7 @@ class RequestsWrapper:
         Returns:
             url completa para o request
         """
-        url = f"{self.__base_url}/"
+        url = f"{self._base_url}/"
         if action:
             url += f"{action}/"
 
@@ -107,6 +107,14 @@ class RequestsWrapper:
         """
         raise NotImplementedError("Must implement auth function!")
 
+    @property
+    def _base_url(self):
+        return self.__base_url
+
+    @property
+    def _headers(self):
+        return {"Authorization": self._auth}
+
     def _delete(self, url) -> requests.Response:
         """
         http delete
@@ -117,7 +125,7 @@ class RequestsWrapper:
         Returns:
             (:class:`.requests.Response`)
         """
-        response = requests.delete(url, auth=self._auth)
+        response = requests.delete(url, headers=self._headers)
         response = self.__process_response(response)
         return response
 
@@ -131,7 +139,7 @@ class RequestsWrapper:
         Returns:
             (:class:`.requests.Response`)
         """
-        response = requests.get(url, auth=self._auth)
+        response = requests.get(url, headers=self._headers)
         response = self.__process_response(response)
         return response
 
@@ -146,7 +154,7 @@ class RequestsWrapper:
         Returns:
             (:class:`.requests.Response`)
         """
-        response = requests.post(url, json=data, auth=self._auth)
+        response = requests.post(url, json=data, headers=self._headers)
         response = self.__process_response(response)
         return response
 
@@ -161,7 +169,12 @@ class RequestsWrapper:
         Returns:
             (:class:`.requests.Response`)
         """
-        response = requests.put(url, json=data, auth=self._auth)
+        response = requests.put(url, json=data, headers=self._headers)
+        response = self.__process_response(response)
+        return response
+
+    def _patch(self, url, data) -> requests.Response:
+        response = requests.patch(url, json=data, headers=self._headers)
         response = self.__process_response(response)
         return response
 
@@ -176,7 +189,7 @@ class BaseImopayWrapper(RequestsWrapper):
     """
 
     BASE_SCHEMA = "http://"
-    BASE_URL = "imopay.com.br/"
+    BASE_URL = "imopay.com.br"
 
     def __init__(self, imopay_env=None, imopay_api_key=None):
         if imopay_env is None:
@@ -187,6 +200,9 @@ class BaseImopayWrapper(RequestsWrapper):
 
         self.__imopay_env = imopay_env
         self.__imopay_api_key = imopay_api_key
+
+        if self.__imopay_api_key == "" or self.__imopay_env == "":
+            raise ValueError("configure as variáveis corretamente!")
 
         super().__init__(
             base_url=f"{self.BASE_SCHEMA}{self.__imopay_env}.{self.BASE_URL}"
@@ -202,3 +218,25 @@ class BaseImopayWrapper(RequestsWrapper):
             Authorization com :attr:`.IMOAY_API_KEY`
         """
         return f"Api-Key {self.__imopay_api_key}"
+
+    @property
+    def model(self):
+        raise NotImplementedError()
+
+    @property
+    def action(self):
+        raise NotImplementedError()
+
+    def create(self, data: dict):
+        instance = self.model(**data)
+        url = self._construct_url(action=self.action)
+        return self._post(url, instance.to_dict())
+
+    def update(self, identifier: str, data: dict):
+        instance = self.model.from_dict(data)
+        url = self._construct_url(action=self.action, identifier=identifier)
+        return self._patch(url, instance.to_dict())
+
+    def retrieve(self, identifier: str):
+        url = self._construct_url(action=self.action, identifier=identifier)
+        return self._get(url)
