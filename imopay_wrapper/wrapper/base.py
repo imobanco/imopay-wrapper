@@ -73,7 +73,7 @@ class RequestsWrapper:
         Returns:
             url completa para o request
         """
-        url = f"{self.__base_url}/"
+        url = f"{self._base_url}/"
         if action:
             url += f"{action}/"
 
@@ -106,6 +106,10 @@ class RequestsWrapper:
             NotImplementedError: É um método abstrato!
         """
         raise NotImplementedError("Must implement auth function!")
+
+    @property
+    def _base_url(self):
+        return self.__base_url
 
     @property
     def _headers(self):
@@ -166,6 +170,11 @@ class RequestsWrapper:
             (:class:`.requests.Response`)
         """
         response = requests.put(url, json=data, headers=self._headers)
+        response = self.__process_response(response)
+        return response
+
+    def _patch(self, url, data) -> requests.Response:
+        response = requests.patch(url, json=data, headers=self._headers)
         response = self.__process_response(response)
         return response
 
