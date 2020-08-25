@@ -107,6 +107,10 @@ class RequestsWrapper:
         """
         raise NotImplementedError("Must implement auth function!")
 
+    @property
+    def _headers(self):
+        return {'Authorization': self._auth}
+
     def _delete(self, url) -> requests.Response:
         """
         http delete
@@ -117,7 +121,7 @@ class RequestsWrapper:
         Returns:
             (:class:`.requests.Response`)
         """
-        response = requests.delete(url, auth=self._auth)
+        response = requests.delete(url, headers=self._headers)
         response = self.__process_response(response)
         return response
 
@@ -131,7 +135,7 @@ class RequestsWrapper:
         Returns:
             (:class:`.requests.Response`)
         """
-        response = requests.get(url, auth=self._auth)
+        response = requests.get(url, headers=self._headers)
         response = self.__process_response(response)
         return response
 
@@ -146,7 +150,7 @@ class RequestsWrapper:
         Returns:
             (:class:`.requests.Response`)
         """
-        response = requests.post(url, json=data, auth=self._auth)
+        response = requests.post(url, json=data, headers=self._headers)
         response = self.__process_response(response)
         return response
 
@@ -161,7 +165,7 @@ class RequestsWrapper:
         Returns:
             (:class:`.requests.Response`)
         """
-        response = requests.put(url, json=data, auth=self._auth)
+        response = requests.put(url, json=data, headers=self._headers)
         response = self.__process_response(response)
         return response
 
@@ -176,7 +180,7 @@ class BaseImopayWrapper(RequestsWrapper):
     """
 
     BASE_SCHEMA = "http://"
-    BASE_URL = "imopay.com.br/"
+    BASE_URL = "imopay.com.br"
 
     def __init__(self, imopay_env=None, imopay_api_key=None):
         if imopay_env is None:
@@ -187,6 +191,9 @@ class BaseImopayWrapper(RequestsWrapper):
 
         self.__imopay_env = imopay_env
         self.__imopay_api_key = imopay_api_key
+
+        if self.__imopay_api_key == "" or self.__imopay_env == "":
+            raise ValueError("configure as variáveis corretamente!")
 
         super().__init__(
             base_url=f"{self.BASE_SCHEMA}{self.__imopay_env}.{self.BASE_URL}"
