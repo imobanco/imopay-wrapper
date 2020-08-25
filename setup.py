@@ -34,10 +34,7 @@ setup(
         "",
     ],
     python_requires=">=3.7",
-    install_requires=[
-        "requests>=2.23.0",
-        "python-decouple>=3.3"
-    ],
+    install_requires=["requests>=2.23.0", "python-decouple>=3.3"],
     keywords="Imopay API client wrapper",
     project_urls={
         "Documentation": "https://imopay-wrapper.readthedocs.io",
