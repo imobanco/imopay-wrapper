@@ -35,7 +35,7 @@ class BaseImopayWrapperTestCase(TestCase):
 
         mocked_post.assert_called_once_with(
             self.client._construct_url(action=mocked_action.return_value),
-            mocked_model.return_value.return_value.to_dict.return_value
+            mocked_model.return_value.return_value.to_dict.return_value,
         )
 
     def test_update(self):
@@ -49,15 +49,17 @@ class BaseImopayWrapperTestCase(TestCase):
         ) as mocked_action, patch(
             "imopay_wrapper.wrapper.base.BaseImopayWrapper._patch"
         ) as mocked_patch:
-            self.client.update('1', {})
+            self.client.update("1", {})
 
         mocked_model.assert_called_once()
 
         mocked_action.assert_called_once()
 
         mocked_patch.assert_called_once_with(
-            self.client._construct_url(action=mocked_action.return_value, identifier='1'),
-            mocked_model.return_value.from_dict.return_value.to_dict.return_value
+            self.client._construct_url(
+                action=mocked_action.return_value, identifier="1"
+            ),
+            mocked_model.return_value.from_dict.return_value.to_dict.return_value,
         )
 
     def test_retrieve(self):
@@ -71,12 +73,14 @@ class BaseImopayWrapperTestCase(TestCase):
         ) as mocked_action, patch(
             "imopay_wrapper.wrapper.base.BaseImopayWrapper._get"
         ) as mocked_get:
-            self.client.retrieve('1')
+            self.client.retrieve("1")
 
         mocked_model.assert_not_called()
 
         mocked_action.assert_called_once()
 
         mocked_get.assert_called_once_with(
-            self.client._construct_url(action=mocked_action.return_value, identifier='1')
+            self.client._construct_url(
+                action=mocked_action.return_value, identifier="1"
+            )
         )
