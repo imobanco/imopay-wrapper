@@ -17,7 +17,7 @@ setup(
     long_description=long_description,
     long_description_content_type="text/markdown",
     url="https://github.com/imobanco/imopay-wrapper",
-    packages=["imopay_wrapper"],
+    packages=["imopay_wrapper", "imopay_wrapper.wrapper", "imopay_wrapper.models"],
     classifiers=[
         "Programming Language :: Python :: 3",
         "Development Status :: 3 - Alpha",
