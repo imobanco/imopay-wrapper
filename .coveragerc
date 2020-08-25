@@ -6,3 +6,4 @@ omit =
 	*/examples/*
 	*/_version.py
 	*/__init__.py
+	
