@@ -8,6 +8,11 @@ class PersonWrapper(BaseImopayWrapper):
     """
 
     def create_person(self, data: dict):
-        p = Person(**data)
+        p = Person.from_dict(data)
         url = self._construct_url(action='persons')
         return self._post(url, p.to_dict())
+
+    def update_person(self, identifier: str, data: dict):
+        p = Person.from_dict(data)
+        url = self._construct_url(action='persons', identifier=identifier)
+        return self._patch(url, p.to_dict())
