@@ -113,7 +113,7 @@ class RequestsWrapper:
 
     @property
     def _headers(self):
-        return {'Authorization': self._auth}
+        return {"Authorization": self._auth}
 
     def _delete(self, url) -> requests.Response:
         """

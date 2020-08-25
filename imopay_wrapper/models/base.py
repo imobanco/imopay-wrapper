@@ -8,7 +8,7 @@ class BaseImopayObj:
 
     @classmethod
     def get_fields(cls):
-        return cls.__dict__.get('__annotations__', {})
+        return cls.__dict__.get("__annotations__", {})
 
     def to_dict(self):
         data = {}
@@ -37,4 +37,4 @@ class BaseImopayObj:
 
     @staticmethod
     def is_empty_value(value):
-        return value == '' or value is None
+        return value == "" or value is None
