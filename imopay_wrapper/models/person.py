@@ -11,5 +11,5 @@ class Person(BaseImopayObj):
     last_name: str
     cpf: str
     birthdate: str
-    mobile_phone: str = None
-    website: str = None
+    mobile_phone: str = ''
+    website: str = ''
