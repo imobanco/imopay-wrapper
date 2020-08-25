@@ -218,3 +218,25 @@ class BaseImopayWrapper(RequestsWrapper):
             Authorization com :attr:`.IMOAY_API_KEY`
         """
         return f"Api-Key {self.__imopay_api_key}"
+
+    @property
+    def model(self):
+        raise NotImplementedError()
+
+    @property
+    def action(self):
+        raise NotImplementedError()
+
+    def create(self, data: dict):
+        instance = self.model(**data)
+        url = self._construct_url(action=self.action)
+        return self._post(url, instance.to_dict())
+
+    def update(self, identifier: str, data: dict):
+        instance = self.model.from_dict(data)
+        url = self._construct_url(action=self.action, identifier=identifier)
+        return self._patch(url, instance.to_dict())
+
+    def retrieve(self, identifier: str):
+        url = self._construct_url(action=self.action, identifier=identifier)
+        return self._get(url)
