@@ -13,4 +13,4 @@ class PersonWrapper(BaseImopayWrapper):
 
     @property
     def action(self):
-        return 'persons'
+        return "persons"

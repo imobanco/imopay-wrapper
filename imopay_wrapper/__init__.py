@@ -1,1 +1,1 @@
-from .wrapper import ImopayWrapper
+from .wrapper import ImopayWrapper  # noqa
