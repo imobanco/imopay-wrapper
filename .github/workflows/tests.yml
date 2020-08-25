@@ -56,6 +56,12 @@ jobs:
     runs-on: ubuntu-18.04
     needs: test
     steps:
+      - uses: actions/checkout@v2
+
+      - name: Set up Python 3.6
+        uses: actions/setup-python@v1
+        with:
+          python-version: ${{ matrix.python }}
 
       - name: Install dependencies
         run: make pip.install
