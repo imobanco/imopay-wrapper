@@ -174,7 +174,8 @@ class BaseImopayWrapper(RequestsWrapper):
         __imopay_env: ambiente do Imopay
         __imopay_api_key: chave de autenticação do Imopay
     """
-    BASE_SCHEMA = 'http://'
+
+    BASE_SCHEMA = "http://"
     BASE_URL = "imopay.com.br/"
 
     def __init__(self, imopay_env=None, imopay_api_key=None):
@@ -187,7 +188,9 @@ class BaseImopayWrapper(RequestsWrapper):
         self.__imopay_env = imopay_env
         self.__imopay_api_key = imopay_api_key
 
-        super().__init__(base_url=f"{self.BASE_SCHEMA}{self.__imopay_env}.{self.BASE_URL}")
+        super().__init__(
+            base_url=f"{self.BASE_SCHEMA}{self.__imopay_env}.{self.BASE_URL}"
+        )
 
     @property
     def _auth(self):
@@ -195,6 +198,7 @@ class BaseImopayWrapper(RequestsWrapper):
         Propriedade de autenticação.
 
         Returns:
-            string de autenticação para o header Authorization com :attr:`.IMOAY_API_KEY`
+            string de autenticação para o header
+            Authorization com :attr:`.IMOAY_API_KEY`
         """
         return f"Api-Key {self.__imopay_api_key}"

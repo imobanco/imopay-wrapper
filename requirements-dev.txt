@@ -4,7 +4,7 @@
 
 # Docs
 # ------------------------------------------------
-Sphinx==3.0.0
+Sphinx==3.*
 sphinx-rtd-theme==0.4.3
 
 # Coverage
