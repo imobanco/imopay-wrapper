@@ -187,7 +187,7 @@ class BaseImopayWrapper(RequestsWrapper):
         self.__imopay_env = imopay_env
         self.__imopay_api_key = imopay_api_key
 
-        super().__init__(base_url=f"{self.BASE_SCHEMA}{self.__imopay_env}.{self.BASE_URL}{self.__imopay_env}")
+        super().__init__(base_url=f"{self.BASE_SCHEMA}{self.__imopay_env}.{self.BASE_URL}")
 
     @property
     def _auth(self):
