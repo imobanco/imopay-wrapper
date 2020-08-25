@@ -33,7 +33,7 @@ setup(
         "",
         "",
     ],
-    python_requires=">=3.6",
+    python_requires=">=3.7",
     install_requires=[
         "requests>=2.23.0",
         "python-decouple>=3.3",
