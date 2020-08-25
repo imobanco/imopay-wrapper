@@ -1,28 +1,29 @@
 from ..utils import LocalImopayTestCase
-from imopay_wrapper.wrapper.person import PersonWrapper
+from imopay_wrapper import ImopayWrapper
 from factories.person import PersonFactory, Person
 
 
 class PersonWrapperTestCase(LocalImopayTestCase):
     def test_create_update_retrieve(self):
-        client = PersonWrapper()
+        client = ImopayWrapper()
+        person_client = client.person
 
         p = PersonFactory(first_name="original")
 
-        response = client.create_person(p.to_dict())
+        response = person_client.create(p.to_dict())
 
         self.assertEqual(response.status_code, 201)
         self.assertEqual(response.data.get("first_name"), "original")
 
-        self.id = response.data.get("id")
+        id = response.data.get("id")
 
         p = Person.from_dict({"first_name": "modificado"})
 
-        response = client.update_person(self.id, p.to_dict())
+        response = person_client.update(id, p.to_dict())
 
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.data.get("first_name"), "modificado")
 
-        response = client.retrieve_person(self.id)
+        response = person_client.retrieve(id)
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.data.get("first_name"), "modificado")
