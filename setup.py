@@ -36,9 +36,7 @@ setup(
     python_requires=">=3.7",
     install_requires=[
         "requests>=2.23.0",
-        "python-decouple>=3.3",
-        "pycpfcnpj>=1.5.1",
-        "card-identifier==1.0",
+        "python-decouple>=3.3"
     ],
     keywords="Imopay API client wrapper",
     project_urls={
