@@ -4,7 +4,7 @@ from .person import PersonWrapper
 
 
 class ImopayWrapper:
-    def __init__(self):
-        self.address = AddressWrapper()
-        self.company = CompanyWrapper()
-        self.person = PersonWrapper()
+    def __init__(self, *args, **kwargs):
+        self.address = AddressWrapper(*args, **kwargs)
+        self.company = CompanyWrapper(*args, **kwargs)
+        self.person = PersonWrapper(*args, **kwargs)
