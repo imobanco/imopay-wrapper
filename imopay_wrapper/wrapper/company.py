@@ -13,4 +13,4 @@ class CompanyWrapper(BaseImopayWrapper):
 
     @property
     def action(self):
-        return 'companies'
+        return "companies"
