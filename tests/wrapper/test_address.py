@@ -32,6 +32,8 @@ class PersonWrapperTestCase(LocalImopayTestCase):
         mocked_action.assert_called_once()
 
         mocked_post.assert_called_once_with(
-            self.client._construct_url(action=mocked_action.return_value, subaction='create_by_name_and_uf'),
+            self.client._construct_url(
+                action=mocked_action.return_value, subaction="create_by_name_and_uf"
+            ),
             mocked_model.return_value.return_value.to_dict.return_value,
         )

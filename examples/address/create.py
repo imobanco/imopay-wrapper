@@ -10,7 +10,7 @@ a = {
     "street": "Peterson Mills",
     "number": "9626",
     "neighborhood": "Crescent",
-    "complement": "Senior condition research. City strategy such start. Us brother back against true fall.",
+    "complement": "Senior condition research. City strategy such start",
 }
 
 
