@@ -7,7 +7,7 @@ from .base import BaseImopayObj
 class Address(BaseImopayObj):
     owner: str
     city: str
-    state: str
+    uf: str
     zip_code: str
     street: str
     number: str
