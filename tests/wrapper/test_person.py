@@ -1,6 +1,6 @@
 from ..utils import LocalImopayTestCase
 from imopay_wrapper import ImopayWrapper
-from factories.person import Person
+from imopay_wrapper.models.person import Person
 
 
 class PersonWrapperTestCase(LocalImopayTestCase):
