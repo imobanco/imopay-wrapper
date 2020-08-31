@@ -16,8 +16,6 @@ class PersonWrapper(BaseImopayWrapper):
         return "persons"
 
     def search(self, value):
-        data = {
-            "cpf": value
-        }
-        url = self._construct_url(action=self.action, subaction='search')
+        data = {"cpf": value}
+        url = self._construct_url(action=self.action, subaction="search")
         return self._post(url, data)

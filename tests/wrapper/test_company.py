@@ -16,20 +16,17 @@ class CompanyWrapperTestCase(LocalImopayTestCase):
         self.assertEqual(self.client.action, "companies")
 
     def test_search(self):
-        cnpj = 'foo'
+        cnpj = "foo"
 
-        expected_data = {
-            "cnpj": cnpj
-        }
+        expected_data = {"cnpj": cnpj}
 
-        expected_url = self.client._construct_url(action=self.client.action, subaction='search')
+        expected_url = self.client._construct_url(
+            action=self.client.action, subaction="search"
+        )
 
         with patch(
             "imopay_wrapper.wrapper.base.BaseImopayWrapper._post"
         ) as mocked_post:
             self.client.search(cnpj)
 
-        mocked_post.assert_called_once_with(
-            expected_url,
-            expected_data
-        )
+        mocked_post.assert_called_once_with(expected_url, expected_data)

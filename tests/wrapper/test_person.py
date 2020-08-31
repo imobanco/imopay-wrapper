@@ -16,20 +16,17 @@ class PersonWrapperTestCase(LocalImopayTestCase):
         self.assertEqual(self.client.action, "persons")
 
     def test_search(self):
-        cpf = 'foo'
+        cpf = "foo"
 
-        expected_data = {
-            "cpf": cpf
-        }
+        expected_data = {"cpf": cpf}
 
-        expected_url = self.client._construct_url(action=self.client.action, subaction='search')
+        expected_url = self.client._construct_url(
+            action=self.client.action, subaction="search"
+        )
 
         with patch(
             "imopay_wrapper.wrapper.base.BaseImopayWrapper._post"
         ) as mocked_post:
             self.client.search(cpf)
 
-        mocked_post.assert_called_once_with(
-            expected_url,
-            expected_data
-        )
+        mocked_post.assert_called_once_with(expected_url, expected_data)
