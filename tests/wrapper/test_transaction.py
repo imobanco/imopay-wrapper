@@ -42,7 +42,7 @@ class TransactionWrapperTestCase(LocalImopayTestCase):
         }
 
         expected_url = self.client._construct_url(
-            action=self.client.action, subaction="create_invoice"
+            action=self.client.action, subaction="create_invoice_transaction"
         )
 
         with patch(
