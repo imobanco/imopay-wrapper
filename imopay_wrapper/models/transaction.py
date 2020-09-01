@@ -52,7 +52,7 @@ class InvoiceConfigurations(BaseImopayObj):
             data["interest"] = self.interest.to_dict()
 
         if self.discounts:
-            data['discounts'] = [discount.to_dict() for discount in self.discounts]
+            data["discounts"] = [discount.to_dict() for discount in self.discounts]
         return data
 
 
