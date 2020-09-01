@@ -13,5 +13,7 @@ class TransactionWrapper(BaseImopayWrapper, RetrieveMixin):
 
     def create_invoice(self, data: dict):
         instance = InvoiceTransaction(**data)
-        url = self._construct_url(action=self.action, subaction="create_invoice_transaction")
+        url = self._construct_url(
+            action=self.action, subaction="create_invoice_transaction"
+        )
         return self._post(url, instance.to_dict())
