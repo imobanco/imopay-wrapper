@@ -18,7 +18,10 @@ class BaseImopayObj:
             if self.is_empty_value(value):
                 continue
 
-            data[field_name] = field_type(value)
+            if isinstance(value, BaseImopayObj):
+                data[field_name] = value.to_dict()
+            else:
+                data[field_name] = field_type(value)
         return data
 
     @classmethod
