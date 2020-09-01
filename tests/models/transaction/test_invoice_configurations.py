@@ -19,3 +19,13 @@ class InvoiceConfigurationsTestCase(TestCase):
             {"fine": {"value": 1, "type": "foo", "charge_type": "foo", "days": 0}}
         )
         self.assertEqual(t.fine.value, 1)
+
+    def test_3(self):
+        t = InvoiceConfigurations.from_dict(
+            {
+                "fine": Configuration.from_dict(
+                    {"value": 1, "type": "foo", "charge_type": "foo", "days": 0}
+                )
+            }
+        )
+        t.to_dict()

@@ -44,11 +44,15 @@ class InvoiceConfigurations(BaseImopayObj):
         Ao invés de solucionar isso, mais fácil sobreescrever o método
         no momento.
         """
-        data = {
-            "fine": self.fine.to_dict(),
-            "interest": self.interest.to_dict(),
-            "discounts": [discount.to_dict() for discount in self.discounts],
-        }
+        data = {}
+        if self.fine:
+            data["fine"] = self.fine.to_dict()
+
+        if self.interest:
+            data["interest"] = self.interest.to_dict()
+
+        if self.discounts:
+            data["discounts"] = [discount.to_dict() for discount in self.discounts]
         return data
 
 
