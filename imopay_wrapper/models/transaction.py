@@ -4,9 +4,13 @@ from dataclasses import dataclass, field
 from .base import BaseImopayObj
 
 
-# @dataclass
-# class BaseTransaction(BaseImopayObj):
-
+@dataclass
+class BaseTransaction(BaseImopayObj):
+    payer: str
+    receiver: str
+    reference_id: str
+    amount: int
+    description: str
 
 
 @dataclass
@@ -46,13 +50,8 @@ class Invoice(BaseImopayObj):
 
 
 @dataclass
-class InvoiceTransaction(BaseImopayObj):
+class InvoiceTransaction(BaseTransaction):
     payment_method: Invoice
-    payer: str
-    receiver: str
-    reference_id: str
-    amount: int
-    description: str
 
     def __post_init__(self):
         if isinstance(self.payment_method, dict):

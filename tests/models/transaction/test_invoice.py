@@ -8,12 +8,7 @@ class InvoiceTestCase(TestCase):
         t = Invoice.from_dict(
             {
                 "configurations": {
-                    "fine": {
-                        "value": 1,
-                        "type": "foo",
-                        "charge_type": "foo",
-                        "days": 0
-                    }
+                    "fine": {"value": 1, "type": "foo", "charge_type": "foo", "days": 0}
                 }
             }
         )
