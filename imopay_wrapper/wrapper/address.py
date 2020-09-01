@@ -1,8 +1,8 @@
-from .base import BaseImopayWrapper
+from .base import BaseImopayWrapper, CreateMixin, UpdateMixin, RetrieveMixin
 from ..models.address import Address
 
 
-class AddressWrapper(BaseImopayWrapper):
+class AddressWrapper(BaseImopayWrapper, CreateMixin, UpdateMixin, RetrieveMixin):
     """
     Wrapper para os métodos de address
     """
