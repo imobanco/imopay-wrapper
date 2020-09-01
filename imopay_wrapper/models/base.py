@@ -8,11 +8,11 @@ class BaseImopayObj:
 
     @classmethod
     def get_fields(cls):
-        return cls.__dict__.get("__annotations__", {})
+        return cls.__dataclass_fields__
 
     def to_dict(self):
         data = {}
-        for field_name, field_type in self.get_fields().items():
+        for field_name, field in self.get_fields().items():
             value = getattr(self, field_name)
 
             if self.is_empty_value(value):
@@ -21,7 +21,7 @@ class BaseImopayObj:
             if isinstance(value, BaseImopayObj):
                 data[field_name] = value.to_dict()
             else:
-                data[field_name] = field_type(value)
+                data[field_name] = field.type(value)
         return data
 
     @classmethod
