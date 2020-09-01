@@ -21,14 +21,25 @@ class InvoiceTransactionTestCase(TestCase):
         t = InvoiceTransaction.from_dict(
             {
                 "payment_method": {
+                    "expiration_date": "1",
+                    "limit_date": "2",
                     "configurations": {
                         "fine": {
                             "value": 1,
                             "type": "foo",
                             "charge_type": "foo",
                             "days": 0,
-                        }
-                    }
+                        },
+                        "interest": {
+                            "value": 1,
+                            "type": "foo",
+                            "charge_type": "foo",
+                            "days": 0,
+                        },
+                        "discounts": [
+                            {"value": 1, "type": "foo", "charge_type": "foo", "days": 0}
+                        ],
+                    },
                 }
             }
         )

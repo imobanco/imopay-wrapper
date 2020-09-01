@@ -37,12 +37,26 @@ class InvoiceConfigurations(BaseImopayObj):
                 if isinstance(discount, dict):
                     self.discounts[i] = Configuration.from_dict(discount)
 
+    def to_dict(self):
+        """
+        Por causa do typehint 'List' o to_dict original não funciona!
+
+        Ao invés de solucionar isso, mais fácil sobreescrever o método
+        no momento.
+        """
+        data = {
+            "fine": self.fine.to_dict(),
+            "interest": self.interest.to_dict(),
+            "discounts": [discount.to_dict() for discount in self.discounts],
+        }
+        return data
+
 
 @dataclass
 class Invoice(BaseImopayObj):
     expiration_date: str
     limit_date: str
-    configurations: InvoiceConfigurations
+    configurations: InvoiceConfigurations = field(default_factory=dict)
 
     def __post_init__(self):
         if isinstance(self.configurations, dict):
@@ -55,4 +69,4 @@ class InvoiceTransaction(BaseTransaction):
 
     def __post_init__(self):
         if isinstance(self.payment_method, dict):
-            self.payment_method = Invoice.from_dict(self.payment_method)
+            self.payment_method = Invoice(**self.payment_method)

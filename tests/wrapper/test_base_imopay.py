@@ -1,12 +1,26 @@
 from unittest import TestCase
 from unittest.mock import patch, PropertyMock
 
-from imopay_wrapper.wrapper.base import BaseImopayWrapper
+from imopay_wrapper.wrapper.base import (
+    BaseImopayWrapper,
+    CreateMixin,
+    UpdateMixin,
+    RetrieveMixin,
+)
 
 
 class BaseImopayWrapperTestCase(TestCase):
     def setUp(self):
-        self.client = BaseImopayWrapper()
+        self.client = type(
+            "A",
+            (
+                BaseImopayWrapper,
+                CreateMixin,
+                UpdateMixin,
+                RetrieveMixin,
+            ),
+            {},
+        )()
 
     def test_model(self):
         with self.assertRaises(NotImplementedError):
@@ -17,7 +31,6 @@ class BaseImopayWrapperTestCase(TestCase):
             self.client.action()
 
     def test_create(self):
-
         with patch(
             "imopay_wrapper.wrapper.base.BaseImopayWrapper.model",
             new_callable=PropertyMock,
@@ -39,7 +52,6 @@ class BaseImopayWrapperTestCase(TestCase):
         )
 
     def test_update(self):
-
         with patch(
             "imopay_wrapper.wrapper.base.BaseImopayWrapper.model",
             new_callable=PropertyMock,
@@ -63,7 +75,6 @@ class BaseImopayWrapperTestCase(TestCase):
         )
 
     def test_retrieve(self):
-
         with patch(
             "imopay_wrapper.wrapper.base.BaseImopayWrapper.model",
             new_callable=PropertyMock,

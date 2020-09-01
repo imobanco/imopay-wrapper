@@ -1,8 +1,8 @@
-from .base import BaseImopayWrapper
+from .base import BaseImopayWrapper, CreateMixin, UpdateMixin, RetrieveMixin
 from ..models.person import Person
 
 
-class PersonWrapper(BaseImopayWrapper):
+class PersonWrapper(BaseImopayWrapper, CreateMixin, UpdateMixin, RetrieveMixin):
     """
     Wrapper para os métodos de person
     """

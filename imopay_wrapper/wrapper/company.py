@@ -1,8 +1,8 @@
-from .base import BaseImopayWrapper
+from .base import BaseImopayWrapper, CreateMixin, UpdateMixin, RetrieveMixin
 from ..models.company import Company
 
 
-class CompanyWrapper(BaseImopayWrapper):
+class CompanyWrapper(BaseImopayWrapper, CreateMixin, UpdateMixin, RetrieveMixin):
     """
     Wrapper para os métodos de company
     """
