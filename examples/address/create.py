@@ -5,7 +5,7 @@ client = ImopayWrapper()
 a = {
     "owner": "algum id",
     "city": "Natal",
-    "state": "RN",
+    "uf": "RN",
     "zip_code": "99999999",
     "street": "Peterson Mills",
     "number": "9626",

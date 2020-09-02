@@ -5,15 +5,14 @@ client = ImopayWrapper()
 id = "foo"
 
 a = {
-    "owner": "algum id",
+    "owner": "bar",
     "city": "Natal",
-    "state": "RN",
-    "zip_code": "99999999",
-    "street": "Peterson Mills",
-    "number": "9626",
-    "neighborhood": "Crescent",
-    "complement": "Senior condition research. City strategy such start",
+    "uf": "RN",
+    "zip_code": "59100000",
+    "street": "Rua Qualquer",
+    "number": 11111,
+    "neighborhood": "Tirol",
+    "complement": None,
 }
-
 
 response = client.address.update(id, a)
