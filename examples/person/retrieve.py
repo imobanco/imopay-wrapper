@@ -5,3 +5,5 @@ client = ImopayWrapper()
 id = "foo"
 
 response = client.person.retrieve(id)
+
+print(response.data)

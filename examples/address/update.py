@@ -4,7 +4,7 @@ client = ImopayWrapper()
 
 id = "foo"
 
-a = {
+data = {
     "owner": "bar",
     "city": "Natal",
     "uf": "RN",
@@ -15,4 +15,6 @@ a = {
     "complement": None,
 }
 
-response = client.address.update(id, a)
+response = client.address.update(id, data)
+
+print(response.data)

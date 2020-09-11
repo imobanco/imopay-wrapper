@@ -6,4 +6,4 @@ id = "foo"
 
 response = client.address.retrieve(id)
 
-print(response)
+print(response.data)

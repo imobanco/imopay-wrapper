@@ -4,7 +4,7 @@ client = ImopayWrapper()
 
 id = "foo"
 
-c = {
+data = {
     "email": "ilawson@example.net",
     "phone": "+55 74 99572 8196",
     "cnpj": "13415795551619",
@@ -14,4 +14,6 @@ c = {
     "website": "https://horton-black.info/",
 }
 
-response = client.company.update(id, c)
+response = client.company.update(id, data)
+
+print(response.data)

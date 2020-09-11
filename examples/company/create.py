@@ -2,7 +2,7 @@ from imopay_wrapper import ImopayWrapper
 
 client = ImopayWrapper()
 
-c = {
+data = {
     "email": "ilawson@example.net",
     "phone": "+55 74 99572 8196",
     "cnpj": "13415795551619",
@@ -13,4 +13,6 @@ c = {
 }
 
 
-response = client.company.create(c)
+response = client.company.create(data)
+
+print(response.data)

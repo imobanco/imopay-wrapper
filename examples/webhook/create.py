@@ -1,9 +1,4 @@
-import logging
-
 from imopay_wrapper import ImopayWrapper
-
-
-logger = logging.getLogger()
 
 
 client = ImopayWrapper()

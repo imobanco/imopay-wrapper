@@ -2,8 +2,8 @@ from imopay_wrapper import ImopayWrapper
 
 client = ImopayWrapper()
 
-document = "cpf/cnpj qualquer"
+cpf = "foo"
 
-response = client.address.get_by_document(document)
+response = client.person.retrieve(cpf)
 
 print(response.data)
