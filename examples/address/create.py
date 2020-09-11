@@ -2,8 +2,10 @@ from imopay_wrapper import ImopayWrapper
 
 client = ImopayWrapper()
 
+owner_imopay_id = 'foo'
+
 data = {
-    "owner": "algum id",
+    "owner": owner_imopay_id,
     "city": "Natal",
     "uf": "RN",
     "zip_code": "99999999",

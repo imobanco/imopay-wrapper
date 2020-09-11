@@ -2,7 +2,7 @@ from imopay_wrapper import ImopayWrapper
 
 client = ImopayWrapper()
 
-id = "foo"
+imopay_id = "foo"
 
 data = {
     "email": "tyler13@example.net",
@@ -14,6 +14,6 @@ data = {
     "mobile_phone": "+55 60 97852 2366",
 }
 
-response = client.person.update(id, data)
+response = client.person.update(imopay_id, data)
 
 print(response.data)

@@ -2,7 +2,7 @@ from imopay_wrapper import ImopayWrapper
 
 client = ImopayWrapper()
 
-id = "foo"
+imopay_id = "foo"
 
 data = {
     "owner": "bar",
@@ -15,6 +15,6 @@ data = {
     "complement": None,
 }
 
-response = client.address.update(id, data)
+response = client.address.update(imopay_id, data)
 
 print(response.data)

@@ -2,8 +2,8 @@ from imopay_wrapper import ImopayWrapper
 
 client = ImopayWrapper()
 
-id = "foo"
+imopay_id = "foo"
 
-response = client.address.retrieve(id)
+response = client.address.retrieve(imopay_id)
 
 print(response.data)
