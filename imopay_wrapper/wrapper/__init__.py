@@ -2,6 +2,7 @@ from .address import AddressWrapper
 from .company import CompanyWrapper
 from .person import PersonWrapper
 from .transaction import TransactionWrapper
+from .webhook import WebhookWrapper
 
 
 class ImopayWrapper:
@@ -10,3 +11,4 @@ class ImopayWrapper:
         self.company = CompanyWrapper(*args, **kwargs)
         self.person = PersonWrapper(*args, **kwargs)
         self.transaction = TransactionWrapper(*args, **kwargs)
+        self.webhook = WebhookWrapper(*args, **kwargs)

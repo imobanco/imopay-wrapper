@@ -246,3 +246,9 @@ class RetrieveMixin:
     def retrieve(self, identifier: str):
         url = self._construct_url(action=self.action, identifier=identifier)
         return self._get(url)
+
+
+class DestroyMixin:
+    def destroy(self, identifier: str):
+        url = self._construct_url(action=self.action, identifier=identifier)
+        return self._delete(url)

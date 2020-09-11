@@ -5,7 +5,7 @@ from imopay_wrapper import ImopayWrapper
 from imopay_wrapper.models.address import Address
 
 
-class PersonWrapperTestCase(LocalImopayTestCase):
+class AddressWrapperTestCase(LocalImopayTestCase):
     def setUp(self):
         self.client = ImopayWrapper().address
 
