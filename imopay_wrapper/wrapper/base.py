@@ -1,3 +1,5 @@
+from json.decoder import JSONDecodeError
+
 import requests
 
 from ..constants import IMOPAY_ENV, IMOPAY_API_KEY
@@ -42,7 +44,11 @@ class RequestsWrapper:
         Returns:
             'objeto' (:class:`.requests.Response`) de resposta http
         """
-        response.data = response.json()
+        try:
+            response.data = response.json()
+        except JSONDecodeError:
+            response.data = {}
+        response.reason = response.data
         response.raise_for_status()
         return response
 
@@ -246,3 +252,9 @@ class RetrieveMixin:
     def retrieve(self, identifier: str):
         url = self._construct_url(action=self.action, identifier=identifier)
         return self._get(url)
+
+
+class DestroyMixin:
+    def destroy(self, identifier: str):
+        url = self._construct_url(action=self.action, identifier=identifier)
+        return self._delete(url)

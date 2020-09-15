@@ -1,9 +1,10 @@
 from imopay_wrapper import ImopayWrapper
 
+
 client = ImopayWrapper()
 
-document = "cpf/cnpj qualquer"
+imopay_imopay_id = "foo"
 
-response = client.address.get_by_document(document)
+response = client.webhook.destroy(imopay_imopay_id)
 
 print(response.data)

@@ -2,8 +2,10 @@ from imopay_wrapper import ImopayWrapper
 
 client = ImopayWrapper()
 
-a = {
-    "owner": "algum id",
+owner_imopay_id = "foo"
+
+data = {
+    "owner": owner_imopay_id,
     "city": "Natal",
     "uf": "RN",
     "zip_code": "99999999",
@@ -14,4 +16,6 @@ a = {
 }
 
 
-response = client.address.create(a)
+response = client.address.create(data)
+
+print(response.data)
