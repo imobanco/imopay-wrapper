@@ -14,7 +14,13 @@ class BaseImopayWrapperTestCase(TestCase):
     def setUp(self):
         self.client = type(
             "A",
-            (BaseImopayWrapper, CreateMixin, DestroyMixin, UpdateMixin, RetrieveMixin,),
+            (
+                BaseImopayWrapper,
+                CreateMixin,
+                DestroyMixin,
+                UpdateMixin,
+                RetrieveMixin,
+            ),
             {},
         )()
 
