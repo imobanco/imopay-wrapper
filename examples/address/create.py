@@ -2,7 +2,7 @@ from imopay_wrapper import ImopayWrapper
 
 client = ImopayWrapper()
 
-owner_imopay_id = 'foo'
+owner_imopay_id = "foo"
 
 data = {
     "owner": owner_imopay_id,
