@@ -84,7 +84,6 @@ class BaseImopayObjTestCase(TestCase):
         self.assertEqual(result, expected)
 
     def test_get_validation_methods_2(self):
-
         class CustomClass(BaseImopayObj):
             foo: str
 
@@ -106,7 +105,10 @@ class BaseImopayObjTestCase(TestCase):
 
         mocked_validator_method = MagicMock()
 
-        with patch('imopay_wrapper.models.base.BaseImopayObj._BaseImopayObj__get_validation_methods') as mocked_get_validation_methods:
+        with patch(
+            "imopay_wrapper.models.base.BaseImopayObj."
+            "_BaseImopayObj__get_validation_methods"
+        ) as mocked_get_validation_methods:
             mocked_get_validation_methods.return_value = [mocked_validator_method]
 
             obj._BaseImopayObj__run_validators()
@@ -116,13 +118,14 @@ class BaseImopayObjTestCase(TestCase):
     def test_run_validators_2(self):
         obj = BaseImopayObj()
 
-        error = FieldError('foo', "bar")
+        error = FieldError("foo", "bar")
 
-        mocked_validator_method = MagicMock(
-            side_effect=error
-        )
+        mocked_validator_method = MagicMock(side_effect=error)
 
-        with patch('imopay_wrapper.models.base.BaseImopayObj._BaseImopayObj__get_validation_methods') as mocked_get_validation_methods:
+        with patch(
+            "imopay_wrapper.models.base.BaseImopayObj."
+            "_BaseImopayObj__get_validation_methods"
+        ) as mocked_get_validation_methods:
             mocked_get_validation_methods.return_value = [mocked_validator_method]
 
             with self.assertRaises(ValidationError) as ctx:
@@ -130,9 +133,5 @@ class BaseImopayObjTestCase(TestCase):
 
         mocked_validator_method.assert_called_once_with()
 
-        self.assertEqual(
-            len(ctx.exception.errors), 1
-        )
-        self.assertEqual(
-            ctx.exception.errors[0], error
-        )
+        self.assertEqual(len(ctx.exception.errors), 1)
+        self.assertEqual(ctx.exception.errors[0], error)
