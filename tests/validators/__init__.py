@@ -1,0 +1,3 @@
+from .test_get_value import GetValueTestCase
+from .test_validate_obj_attr_type import ValidateObjAttrTypeTestCase
+from .test_validate_obj_attr_in_collection import ValidateObjAttrInCollectionTestCase
