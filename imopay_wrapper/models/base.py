@@ -11,7 +11,7 @@ class BaseImopayObj:
         super().__init__(*args, **kwargs)
 
     def __post_init__(self):
-        self.validate_fields()
+        self.__validate_fields()
         self._init_nested_fields()
 
     def _init_nested_fields(self):
@@ -36,8 +36,29 @@ class BaseImopayObj:
                 data[field_name] = field.type(value)
         return data
 
+    def __get_validation_methods(self):
+        data = inspect.getmembers(self, predicate=inspect.ismethod)
+
+        validation_methods = [item[1] for item in data if "_validate" in item[0]]
+
+        return validation_methods
+
+    def __validate_fields(self):
+        validation_methods = self.__get_validation_methods()
+
+        errors = []
+
+        for method in validation_methods:
+            try:
+                method()
+            except FieldError as e:
+                errors.append(e)
+
+        if errors:
+            raise ValidationError(self, errors)
+
     @classmethod
-    def from_dict(cls, data: dict):
+    def from_dict(cls, data: Union[dict, Any]):
 
         missing_fields = {
             field_name
