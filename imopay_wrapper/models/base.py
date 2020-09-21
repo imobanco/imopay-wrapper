@@ -11,7 +11,7 @@ class BaseImopayObj:
         super().__init__(*args, **kwargs)
 
     def __post_init__(self):
-        self.__validate_fields()
+        self.__run_validators()
         self._init_nested_fields()
 
     def _init_nested_fields(self):
@@ -43,7 +43,7 @@ class BaseImopayObj:
 
         return validation_methods
 
-    def __validate_fields(self):
+    def __run_validators(self):
         validation_methods = self.__get_validation_methods()
 
         errors = []
