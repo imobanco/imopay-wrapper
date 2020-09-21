@@ -1,4 +1,8 @@
 from dataclasses import dataclass
+from typing import Union, Any
+import inspect
+
+from ..exceptions import FieldError, ValidationError
 
 
 @dataclass
@@ -6,8 +10,16 @@ class BaseImopayObj:
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
+    def __post_init__(self):
+        self.validate_fields()
+        self._init_nested_fields()
+
+    def _init_nested_fields(self):
+        pass
+
     @classmethod
     def get_fields(cls):
+        # noinspection PyUnresolvedReferences
         return cls.__dataclass_fields__
 
     def to_dict(self):
