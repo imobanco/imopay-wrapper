@@ -34,6 +34,10 @@ class BaseImopayObj:
         return data
 
     def __get_validation_methods(self):
+        """
+        Método para pegar a lista de métodos de validação
+        que seguem o padrão de nomenclatura `_validate`.
+        """
         data = inspect.getmembers(self, predicate=inspect.ismethod)
 
         validation_methods = [item[1] for item in data if "_validate" in item[0]]
@@ -41,6 +45,9 @@ class BaseImopayObj:
         return validation_methods
 
     def __run_validators(self):
+        """
+        Método que executa todos os métodos de validação.
+        """
         validation_methods = self.__get_validation_methods()
 
         errors = []
