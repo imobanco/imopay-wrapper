@@ -3,7 +3,7 @@ from .exceptions import FieldError
 
 def _get_value_from_attr_or_value(obj, attr, value=None):
     if value is None:
-        value = getattr(obj, attr)
+        value = getattr(obj, attr, None)
     return value
 
 
