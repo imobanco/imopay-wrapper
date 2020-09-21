@@ -7,9 +7,6 @@ from ..exceptions import FieldError, ValidationError
 
 @dataclass
 class BaseImopayObj:
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-
     def __post_init__(self):
         self.__run_validators()
         self._init_nested_fields()
@@ -69,6 +66,7 @@ class BaseImopayObj:
         for missing_field in missing_fields:
             data[missing_field] = None
 
+        # noinspection PyArgumentList
         return cls(**data)
 
     @staticmethod

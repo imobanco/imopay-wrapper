@@ -24,7 +24,7 @@ class GetValueTestCase(TestCase):
         self.assertEqual(result, expected)
 
     def test_3(self):
-        obj = ''
+        obj = ""
 
         expected = None
 

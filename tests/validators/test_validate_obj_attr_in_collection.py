@@ -8,35 +8,31 @@ from imopay_wrapper.exceptions import FieldError
 class ValidateObjAttrInCollectionTestCase(TestCase):
     def test_1(self):
 
-        obj = MagicMock(
-            foo='bar'
-        )
+        obj = MagicMock(foo="bar")
 
-        collection = ['bar']
+        collection = ["bar"]
 
-        validate_obj_attr_in_collection(obj, 'foo', collection)
+        validate_obj_attr_in_collection(obj, "foo", collection)
 
     def test_2(self):
 
         obj = MagicMock()
 
-        collection = ['bar']
+        collection = ["bar"]
 
-        validate_obj_attr_in_collection(obj, 'foo', collection, value='bar')
+        validate_obj_attr_in_collection(obj, "foo", collection, value="bar")
 
     def test_3(self):
 
-        obj = MagicMock(
-            foo='bar'
-        )
+        obj = MagicMock(foo="bar")
 
         collection = [1]
 
         with self.assertRaises(FieldError) as ctx:
-            validate_obj_attr_in_collection(obj, 'foo', collection)
+            validate_obj_attr_in_collection(obj, "foo", collection)
 
-        self.assertEqual(ctx.exception.name, 'foo')
-        self.assertIn('bar não está na coleção', ctx.exception.reason)
+        self.assertEqual(ctx.exception.name, "foo")
+        self.assertIn("bar não está na coleção", ctx.exception.reason)
         self.assertIn(str(collection), ctx.exception.reason)
 
     def test_4(self):
@@ -46,8 +42,8 @@ class ValidateObjAttrInCollectionTestCase(TestCase):
         collection = [1]
 
         with self.assertRaises(FieldError) as ctx:
-            validate_obj_attr_in_collection(obj, 'foo', collection, value='bar')
+            validate_obj_attr_in_collection(obj, "foo", collection, value="bar")
 
-        self.assertEqual(ctx.exception.name, 'foo')
-        self.assertIn('bar não está na coleção', ctx.exception.reason)
+        self.assertEqual(ctx.exception.name, "foo")
+        self.assertIn("bar não está na coleção", ctx.exception.reason)
         self.assertIn(str(collection), ctx.exception.reason)

@@ -1,7 +1,9 @@
 from unittest import TestCase
+from unittest.mock import patch, MagicMock
 from dataclasses import dataclass
 
 from imopay_wrapper.models.base import BaseImopayObj
+from imopay_wrapper.exceptions import ValidationError, FieldError
 
 
 class BaseImopayObjTestCase(TestCase):
@@ -59,3 +61,78 @@ class BaseImopayObjTestCase(TestCase):
 
         self.assertEqual(o1.required, None)
         self.assertEqual(o1.non_required, "2")
+
+    def test_post_init(self):
+
+        with patch(
+            "imopay_wrapper.models.base.BaseImopayObj._BaseImopayObj__run_validators"
+        ) as mocked_run_validators, patch(
+            "imopay_wrapper.models.base.BaseImopayObj._init_nested_fields"
+        ) as mocked_init_nested_fields:
+            BaseImopayObj()
+
+        mocked_run_validators.assert_called_once_with()
+        mocked_init_nested_fields.assert_called_once_with()
+
+    def test_get_validation_methods_1(self):
+        obj = BaseImopayObj()
+
+        expected = []
+
+        result = obj._BaseImopayObj__get_validation_methods()
+
+        self.assertEqual(result, expected)
+
+    def test_get_validation_methods_2(self):
+
+        class CustomClass(BaseImopayObj):
+            foo: str
+
+            def _validate_foo(self):
+                pass
+
+        obj = CustomClass()
+
+        result = obj._BaseImopayObj__get_validation_methods()
+
+        self.assertEqual(len(result), 1)
+
+        for item in result:
+            with self.subTest(item):
+                self.assertTrue(callable(item))
+
+    def test_run_validators_1(self):
+        obj = BaseImopayObj()
+
+        mocked_validator_method = MagicMock()
+
+        with patch('imopay_wrapper.models.base.BaseImopayObj._BaseImopayObj__get_validation_methods') as mocked_get_validation_methods:
+            mocked_get_validation_methods.return_value = [mocked_validator_method]
+
+            obj._BaseImopayObj__run_validators()
+
+        mocked_validator_method.assert_called_once_with()
+
+    def test_run_validators_2(self):
+        obj = BaseImopayObj()
+
+        error = FieldError('foo', "bar")
+
+        mocked_validator_method = MagicMock(
+            side_effect=error
+        )
+
+        with patch('imopay_wrapper.models.base.BaseImopayObj._BaseImopayObj__get_validation_methods') as mocked_get_validation_methods:
+            mocked_get_validation_methods.return_value = [mocked_validator_method]
+
+            with self.assertRaises(ValidationError) as ctx:
+                obj._BaseImopayObj__run_validators()
+
+        mocked_validator_method.assert_called_once_with()
+
+        self.assertEqual(
+            len(ctx.exception.errors), 1
+        )
+        self.assertEqual(
+            ctx.exception.errors[0], error
+        )
