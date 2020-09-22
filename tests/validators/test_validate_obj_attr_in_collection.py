@@ -28,7 +28,7 @@ class ValidateObjAttrInCollectionTestCase(TestCase):
             - um objeto obj qualquer que não tenha foo="bar"
             - uma coleção collection ["bar"]
         Quando:
-            - for chamado validate_obj_attr_in_collection(obj, "foo", collection, value="bar")
+            - for chamado validate_obj_attr_in_collection(obj, "foo", collection, value="bar")  # noqa
         Então:
             - N/A
         """
@@ -66,7 +66,7 @@ class ValidateObjAttrInCollectionTestCase(TestCase):
             - um objeto obj qualquer que não tenha foo="bar"
             - uma coleção collection [1]
         Quando:
-            - for chamado validate_obj_attr_in_collection(obj, "foo", collection, value="bar")
+            - for chamado validate_obj_attr_in_collection(obj, "foo", collection, value="bar")  # noqa
         Então:
             - deve ser lançado um FieldError
             - o texto do erro lançado deve estar correto!

@@ -93,6 +93,7 @@ class BaseImopayObjTestCase(TestCase):
         Então:
             - o resultado deve ser uma lista vazia
         """
+
         class CustomClass(BaseImopayObj):
             foo: str
 
@@ -119,6 +120,7 @@ class BaseImopayObjTestCase(TestCase):
             - o resultado deve possuir uma entrada
             - essa entrada deve ser um "chamável"
         """
+
         class CustomClass(BaseImopayObj):
             foo: str
 
