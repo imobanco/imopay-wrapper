@@ -7,7 +7,15 @@ from imopay_wrapper.exceptions import FieldError
 
 class ValidateObjAttrInCollectionTestCase(TestCase):
     def test_1(self):
-
+        """
+        Dado:
+            - um objeto obj qualquer que tenha foo="bar"
+            - uma coleção collection ["bar"]
+        Quando:
+            - for chamado validate_obj_attr_in_collection(obj, "foo", collection)
+        Então:
+            - N/A
+        """
         obj = MagicMock(foo="bar")
 
         collection = ["bar"]
@@ -15,7 +23,15 @@ class ValidateObjAttrInCollectionTestCase(TestCase):
         validate_obj_attr_in_collection(obj, "foo", collection)
 
     def test_2(self):
-
+        """
+        Dado:
+            - um objeto obj qualquer que não tenha foo="bar"
+            - uma coleção collection ["bar"]
+        Quando:
+            - for chamado validate_obj_attr_in_collection(obj, "foo", collection, value="bar")
+        Então:
+            - N/A
+        """
         obj = MagicMock()
 
         collection = ["bar"]
@@ -23,7 +39,16 @@ class ValidateObjAttrInCollectionTestCase(TestCase):
         validate_obj_attr_in_collection(obj, "foo", collection, value="bar")
 
     def test_3(self):
-
+        """
+        Dado:
+            - um objeto obj qualquer que tenha foo="bar"
+            - uma coleção collection [1]
+        Quando:
+            - for chamado validate_obj_attr_in_collection(obj, "foo", collection)
+        Então:
+            - deve ser lançado um FieldError
+            - o texto do erro lançado deve estar correto!
+        """
         obj = MagicMock(foo="bar")
 
         collection = [1]
@@ -36,7 +61,16 @@ class ValidateObjAttrInCollectionTestCase(TestCase):
         self.assertIn(str(collection), ctx.exception.reason)
 
     def test_4(self):
-
+        """
+        Dado:
+            - um objeto obj qualquer que não tenha foo="bar"
+            - uma coleção collection [1]
+        Quando:
+            - for chamado validate_obj_attr_in_collection(obj, "foo", collection, value="bar")
+        Então:
+            - deve ser lançado um FieldError
+            - o texto do erro lançado deve estar correto!
+        """
         obj = MagicMock()
 
         collection = [1]

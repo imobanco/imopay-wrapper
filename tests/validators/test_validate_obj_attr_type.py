@@ -7,19 +7,41 @@ from imopay_wrapper.exceptions import FieldError
 
 class ValidateObjAttrTypeTestCase(TestCase):
     def test_1(self):
-
+        """
+        Dado:
+            - um objeto obj qualquer que tenha foo="bar"
+        Quando:
+            - for chamado validate_obj_attr_type(obj, "foo", str)
+        Então:
+            - N/A
+        """
         obj = MagicMock(foo="bar")
 
         validate_obj_attr_type(obj, "foo", str)
 
     def test_2(self):
-
+        """
+        Dado:
+            - um objeto obj qualquer que não tenha foo="bar"
+        Quando:
+            - for chamado validate_obj_attr_type(obj, "foo", str, value="bar")
+        Então:
+            - N/A
+        """
         obj = MagicMock()
 
         validate_obj_attr_type(obj, "foo", str, value="bar")
 
     def test_3(self):
-
+        """
+        Dado:
+            - um objeto obj qualquer que tenha foo="bar"
+        Quando:
+            - for chamado validate_obj_attr_type(obj, "foo", int)
+        Então:
+            - deve ser lançado um FieldError
+            - o texto do erro deve estar correto
+        """
         obj = MagicMock(foo="bar")
 
         with self.assertRaises(FieldError) as ctx:
@@ -30,7 +52,15 @@ class ValidateObjAttrTypeTestCase(TestCase):
         self.assertIn(str(int), ctx.exception.reason)
 
     def test_4(self):
-
+        """
+        Dado:
+            - um objeto obj qualquer que não tenha foo="bar"
+        Quando:
+            - for chamado validate_obj_attr_type(obj, "foo", int, value="bar")
+        Então:
+            - deve ser lançado um FieldError
+            - o texto do erro deve estar correto
+        """
         obj = MagicMock()
 
         with self.assertRaises(FieldError) as ctx:
