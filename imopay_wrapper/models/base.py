@@ -1,13 +1,22 @@
 from dataclasses import dataclass
+from typing import Union, Any
+import inspect
+
+from ..exceptions import FieldError, ValidationError
 
 
 @dataclass
 class BaseImopayObj:
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
+    def __post_init__(self):
+        self.__run_validators()
+        self._init_nested_fields()
+
+    def _init_nested_fields(self):
+        pass
 
     @classmethod
     def get_fields(cls):
+        # noinspection PyUnresolvedReferences
         return cls.__dataclass_fields__
 
     def to_dict(self):
@@ -24,8 +33,36 @@ class BaseImopayObj:
                 data[field_name] = field.type(value)
         return data
 
+    def __get_validation_methods(self):
+        """
+        Método para pegar a lista de métodos de validação
+        que seguem o padrão de nomenclatura `_validate`.
+        """
+        data = inspect.getmembers(self, predicate=inspect.ismethod)
+
+        validation_methods = [item[1] for item in data if "_validate" in item[0]]
+
+        return validation_methods
+
+    def __run_validators(self):
+        """
+        Método que executa todos os métodos de validação.
+        """
+        validation_methods = self.__get_validation_methods()
+
+        errors = []
+
+        for method in validation_methods:
+            try:
+                method()
+            except FieldError as e:
+                errors.append(e)
+
+        if errors:
+            raise ValidationError(self, errors)
+
     @classmethod
-    def from_dict(cls, data: dict):
+    def from_dict(cls, data: Union[dict, Any]):
 
         missing_fields = {
             field_name
@@ -36,6 +73,7 @@ class BaseImopayObj:
         for missing_field in missing_fields:
             data[missing_field] = None
 
+        # noinspection PyArgumentList
         return cls(**data)
 
     @staticmethod
