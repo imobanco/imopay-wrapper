@@ -1,5 +1,7 @@
 import re
 
+from datetime import date
+
 from .exceptions import FieldError
 
 
@@ -57,3 +59,31 @@ def validate_obj_attr_regex(obj, attr, regex, value=None):
     result = re.search(regex, value)
     if result is None:
         raise FieldError(attr, f"{value} não é do formato f{regex}!")
+
+
+def validate_date_1_gt_date_2(attr, d1, d2):
+    """
+    Método para validar se data 1 é maior do que data 2
+    """
+    if d1 < d2:
+        raise FieldError(attr, f"{d1} não é maior do que {d2}")
+
+
+def validate_date_isoformat(obj, attr, future=None, past=None, value=None):
+    """
+    Método para validar uma data que siga a iso YYYY-mm-dd
+    https://en.wikipedia.org/wiki/ISO_8601
+
+    É possível validar se é uma data futura ou passada também!
+    """
+    value = _get_value_from_attr_or_value(obj, attr, value=value)
+
+    d = date.fromisoformat(value)
+
+    today = date.today()
+
+    if past and d > today:
+        raise FieldError(attr, f"{value} não é uma data do passado!")
+
+    if future and d < today:
+        raise FieldError(attr, f"{value} não é uma data do futuro!")

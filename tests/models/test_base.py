@@ -179,7 +179,9 @@ class BaseImopayObjTestCase(TestCase):
         mocked_field = MagicMock()
 
         obj = MagicMock(
-            _BaseImopayObj__get_fields=MagicMock(return_value={field_name: mocked_field})
+            _BaseImopayObj__get_fields=MagicMock(
+                return_value={field_name: mocked_field}
+            )
         )
 
         expected = mocked_field

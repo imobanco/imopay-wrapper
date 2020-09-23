@@ -6,9 +6,9 @@ from ..exceptions import FieldError
 from ..validators import (
     validate_obj_attr_type,
     validate_obj_attr_in_collection,
-    validate_obj_attr_regex,
+    validate_date_isoformat,
+    validate_date_1_gt_date_2,
 )
-from ..regex import date_regex
 from ..field import field
 
 
@@ -62,9 +62,7 @@ class DiscountConfiguration(FineConfiguration):
     date: str
 
     def _validate_date(self):
-        # TODO validar uma data válida? Mês, ano, dia?
-        #  Utilizar pendulum caso sim!
-        validate_obj_attr_regex(self, "date", date_regex)
+        validate_date_isoformat(self, "date", past=True)
 
 
 @dataclass
@@ -129,12 +127,11 @@ class Invoice(BaseImopayObj):
         validate_obj_attr_type(self, "configurations", dict)
 
     def _validate_expiration_date(self):
-        validate_obj_attr_regex(self, "expiration_date", date_regex)
+        validate_date_isoformat(self, "expiration_date", future=True)
 
     def _validate_limit_date(self):
-        # TODO validar que a data limite é
-        #  maior do que a data de expiração?
-        validate_obj_attr_regex(self, "limit_date", date_regex)
+        validate_date_isoformat(self, "limit_date", future=True)
+        validate_date_1_gt_date_2("limit_date", self.limit_date, self.expiration_date)
 
 
 @dataclass

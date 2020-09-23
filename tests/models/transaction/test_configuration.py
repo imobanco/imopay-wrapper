@@ -15,10 +15,10 @@ class BaseConfigurationTestCase(TestCase):
         """
         Dado:
             - um value válido 1
-            - um charge_type válido 'p'
+            - um charge_type válido BaseConfiguration.PERCENTAGE
                 (BaseConfiguration.VALID_CHARGE_TYPES mocado)
             - um data
-                {"value": 1, "charge_type": 'p'}
+                {"value": 1, "charge_type": BaseConfiguration.PERCENTAGE}
         Quando:
             - for criado um Configuration t a partir do data
         Então:
@@ -26,7 +26,7 @@ class BaseConfigurationTestCase(TestCase):
             - t.charge_type tem que ser igual a charge_type
         """
         value = 1
-        charge_type = "p"
+        charge_type = BaseConfiguration.PERCENTAGE
 
         data = {"value": value, "charge_type": charge_type}
         with patch(
