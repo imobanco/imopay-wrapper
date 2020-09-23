@@ -128,7 +128,7 @@ class BaseConfigurationTestCase(TestCase):
             - for chamado Configuration._validate_charge_type(instance) para cada valor
                 com o valor estando na instância
         Então:
-            - deve ser lançado um FieldError para cada
+            - deve ser lançado um FieldError para cada valor inválido
         """
         invalid_values = [
             "foo",
