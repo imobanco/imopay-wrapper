@@ -1,3 +1,5 @@
+import re
+
 from .exceptions import FieldError
 
 
@@ -41,3 +43,17 @@ def validate_obj_attr_in_collection(obj, attr, collection, value=None):
 
     if value not in collection:
         raise FieldError(attr, f"{value} não está na coleção {collection}")
+
+
+def validate_obj_attr_regex(obj, attr, regex, value=None):
+    """
+    Método para validar que o valor de um atributo do objeto
+    é do formato de um determinado regex.
+
+    Caso o valor não siga o regex, lança o erro!
+    """
+    value = _get_value_from_attr_or_value(obj, attr, value=value)
+
+    result = re.search(regex, value)
+    if result is None:
+        raise FieldError(attr, f"{value} não é do formato f{regex}!")
