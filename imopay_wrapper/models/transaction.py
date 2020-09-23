@@ -1,10 +1,15 @@
 from typing import List
-from dataclasses import dataclass, field
+from dataclasses import dataclass
 
 from .base import BaseImopayObj
 from ..exceptions import FieldError
-from ..validators import validate_obj_attr_type, validate_obj_attr_in_collection, validate_obj_attr_regex
+from ..validators import (
+    validate_obj_attr_type,
+    validate_obj_attr_in_collection,
+    validate_obj_attr_regex,
+)
 from ..regex import date_regex
+from ..field import field
 
 
 @dataclass
@@ -57,14 +62,16 @@ class DiscountConfiguration(FineConfiguration):
     date: str
 
     def _validate_date(self):
-        validate_obj_attr_regex(self, 'date', date_regex)
+        # TODO validar uma data válida? Mês, ano, dia?
+        # Utilizar pendulum caso sim!
+        validate_obj_attr_regex(self, "date", date_regex)
 
 
 @dataclass
 class InvoiceConfigurations(BaseImopayObj):
-    fine: FineConfiguration
-    interest: InterestConfiguration
-    discounts: List[DiscountConfiguration] = field(default=list)
+    fine: FineConfiguration = field(optional=True)
+    interest: InterestConfiguration = field(optional=True)
+    discounts: List[DiscountConfiguration] = field(optional=True, default=list)
 
     def _validate_fine(self):
         validate_obj_attr_type(self, "fine", dict)
@@ -79,8 +86,12 @@ class InvoiceConfigurations(BaseImopayObj):
             validate_obj_attr_type(self, "discounts", dict, value=discount)
 
     def _init_nested_fields(self):
-        self.fine = BaseConfiguration.from_dict(self.fine)
-        self.interest = BaseConfiguration.from_dict(self.interest)
+        if self.fine is not None:
+            self.fine = FineConfiguration.from_dict(self.fine)
+
+        if self.interest is not None:
+            self.interest = InterestConfiguration.from_dict(self.interest)
+
         if self.discounts:
             for i, discount in enumerate(self.discounts):
                 self.discounts[i] = DiscountConfiguration.from_dict(discount)
@@ -108,10 +119,11 @@ class InvoiceConfigurations(BaseImopayObj):
 class Invoice(BaseImopayObj):
     expiration_date: str
     limit_date: str
-    configurations: InvoiceConfigurations = field(default_factory=dict)
+    configurations: InvoiceConfigurations = field(optional=True, default_factory=dict)
 
     def _init_nested_fields(self):
-        self.configurations = InvoiceConfigurations.from_dict(self.configurations)
+        if self.configurations is not None:
+            self.configurations = InvoiceConfigurations.from_dict(self.configurations)
 
     def _validate_configurations(self):
         validate_obj_attr_type(self, "configurations", dict)

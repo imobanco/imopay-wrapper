@@ -1,6 +1,6 @@
 from unittest import TestCase
 
-from imopay_wrapper.models.transaction import Invoice
+from imopay_wrapper.models.transaction import Invoice, BaseConfiguration
 
 
 class InvoiceTestCase(TestCase):
@@ -10,18 +10,18 @@ class InvoiceTestCase(TestCase):
                 "configurations": {
                     "fine": {
                         "value": 1,
-                        "type": "foo",
-                        "charge_type": "foo",
-                        "days": 0,
+                        "charge_type": BaseConfiguration.FIXED,
                     },
                     "interest": {
                         "value": 1,
-                        "type": "foo",
-                        "charge_type": "foo",
-                        "days": 0,
+                        "charge_type": BaseConfiguration.DAILY_FIXED,
                     },
                     "discounts": [
-                        {"value": 1, "type": "foo", "charge_type": "foo", "days": 0}
+                        {
+                            "value": 1,
+                            "charge_type": BaseConfiguration.FIXED,
+                            "date": "2020-08-28",
+                        }
                     ],
                 }
             }
