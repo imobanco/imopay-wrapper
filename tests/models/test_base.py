@@ -166,40 +166,40 @@ class BaseImopayObjTestCase(TestCase):
     def test_get_field_1(self):
         """
         Dado:
-            - um nome 'foo'
+            - um nome de campo field_name 'foo'
             - um campo qualquer mocked_field
-            - um objeto qualquer obj que tenha o campo foo: mocked_field
+            - um objeto qualquer obj que tenha o campo field_name: mocked_field
         Quando:
-            - for chamado BaseImopayObj._BaseImopayObj__get_field(obj, name)
+            - for chamado BaseImopayObj._BaseImopayObj__get_field(obj, field_name)
         Então:
             - o resultado deve ser mocked_field
         """
-        name = "foo"
+        field_name = "foo"
 
         mocked_field = MagicMock()
 
         obj = MagicMock(
-            _BaseImopayObj__get_fields=MagicMock(return_value={name: mocked_field})
+            _BaseImopayObj__get_fields=MagicMock(return_value={field_name: mocked_field})
         )
 
         expected = mocked_field
 
-        result = BaseImopayObj._BaseImopayObj__get_field(obj, name)
+        result = BaseImopayObj._BaseImopayObj__get_field(obj, field_name)
 
         self.assertEqual(result, expected)
 
     def test_get_field_2(self):
         """
         Dado:
-            - um nome 'foo'
+            - um nome de campo field_name 'foo'
             - um campo qualquer mocked_field
-            - um objeto qualquer obj que tenha o campo bar: mocked_field
+            - um objeto qualquer obj que tenha o campo 'bar': mocked_field
         Quando:
             - for chamado BaseImopayObj._BaseImopayObj__get_field(obj, name)
         Então:
             - deve ser lançado um AttributeError
         """
-        name = "foo"
+        field_name = "foo"
 
         mocked_field = MagicMock()
 
@@ -208,7 +208,7 @@ class BaseImopayObjTestCase(TestCase):
         )
 
         with self.assertRaises(AttributeError):
-            BaseImopayObj._BaseImopayObj__get_field(obj, name)
+            BaseImopayObj._BaseImopayObj__get_field(obj, field_name)
 
     def test_is_field_optional_1(self):
         """
