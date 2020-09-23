@@ -62,7 +62,8 @@ class BaseConfigurationTestCase(TestCase):
     def test_validate_value_2(self):
         """
         Dado:
-            - um mapeamento invalid_values_by_error de vários erros para listas de valores inválidos
+            - um mapeamento invalid_values_by_error de vários erros
+                para listas de valores inválidos
                 {
                     FieldError: ['-1', 0],
                     TypeError: [[], None, {}],
@@ -215,7 +216,8 @@ class DiscountConfigurationTestCase(TestCase):
     def test_validate_date_2(self):
         """
         Dado:
-            - um mapeamento invalid_values_by_error de vários erros para listas de valores inválidos
+            - um mapeamento invalid_values_by_error de vários erros para
+                listas de valores inválidos
                 {
                     FieldError: ['-1', 0],
                     TypeError: [[], None, {}],

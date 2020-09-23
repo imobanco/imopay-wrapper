@@ -61,7 +61,8 @@ class InvoiceTestCase(TestCase):
     def test_validate_expiration_date_2(self):
         """
         Dado:
-            - um mapeamento invalid_values_by_error de vários erros para listas de valores inválidos
+            - um mapeamento invalid_values_by_error de vários erros
+                para listas de valores inválidos
                 {
                     FieldError: ['-1', 0],
                     TypeError: [[], None, {}],
@@ -69,8 +70,8 @@ class InvoiceTestCase(TestCase):
                 }
             - uma instância qualquer
         Quando:
-            - for chamado Invoice._validate_expiration_date(instance) para cada erro e valor
-                com o valor estando na instância
+            - for chamado Invoice._validate_expiration_date(instance) para
+                cada erro e valor com o valor estando na instância
         Então:
             - deve ser lançado o erro específico para cada valor
         """
@@ -114,7 +115,8 @@ class InvoiceTestCase(TestCase):
     def test_validate_limit_date_2(self):
         """
         Dado:
-            - um mapeamento invalid_values_by_error de vários erros para listas de valores inválidos
+            - um mapeamento invalid_values_by_error de vários erros para
+                listas de valores inválidos
                 {
                     FieldError: ['-1', 0],
                     TypeError: [[], None, {}],

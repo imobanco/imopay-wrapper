@@ -151,7 +151,7 @@ class BaseImopayObjTestCase(TestCase):
             - um método com
                 __name__="_validate_foo"
         Quando:
-            - for chamado BaseImopayObj._BaseImopayObj__get_attr_name_from_method(method)
+            - for chamado BaseImopayObj._BaseImopayObj__get_attr_name_from_method(method)  # noqa
         Então:
             - o resultado deve ser "foo"
         """
@@ -215,7 +215,7 @@ class BaseImopayObjTestCase(TestCase):
         Dado:
             - um campo qualquer mocked_field optional=True
         Quando:
-            - quando for chamado BaseImopayObj._BaseImopayObj__is_field_optional(mocked_field)
+            - quando for chamado BaseImopayObj._BaseImopayObj__is_field_optional(mocked_field)  # noqa
         Então:
             - o resultado deve ser True
         """
@@ -232,7 +232,7 @@ class BaseImopayObjTestCase(TestCase):
         Dado:
             - um campo qualquer mocked_field optional=False
         Quando:
-            - quando for chamado BaseImopayObj._BaseImopayObj__is_field_optional(mocked_field)
+            - quando for chamado BaseImopayObj._BaseImopayObj__is_field_optional(mocked_field)  # noqa
         Então:
             - o resultado deve ser False
         """
@@ -249,7 +249,7 @@ class BaseImopayObjTestCase(TestCase):
         Dado:
             - um campo qualquer mocked_field que não tenha o atributo optional
         Quando:
-            - quando for chamado BaseImopayObj._BaseImopayObj__is_field_optional(mocked_field)
+            - quando for chamado BaseImopayObj._BaseImopayObj__is_field_optional(mocked_field)  # noqa
         Então:
             - o resultado deve ser False
         """

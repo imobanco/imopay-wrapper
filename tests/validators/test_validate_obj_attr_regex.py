@@ -27,7 +27,7 @@ class ValidateObjAttrRegexTestCase(TestCase):
             - um objeto obj qualquer que tenha foo="bar"
             - um regex de data
         Quando:
-            - for chamado validate_obj_attr_regex(obj, "foo", date_regex, value="2020-08-20")
+            - for chamado validate_obj_attr_regex(obj, "foo", date_regex, value="2020-08-20")  # noqa
         Então:
             - N/A
         """
