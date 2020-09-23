@@ -16,7 +16,7 @@ class BaseImopayObjTestCase(TestCase):
         self.custom_class = CustomClass
 
     def test_is_empty_value(self):
-        self.assertTrue(BaseImopayObj.is_empty_value(""))
+        self.assertTrue(BaseImopayObj._BaseImopayObj__is_empty_value(""))
 
     def test_to_dict_1(self):
         o1 = self.custom_class(required="value")
@@ -121,13 +121,14 @@ class BaseImopayObjTestCase(TestCase):
             - essa entrada deve ser um "chamável"
         """
 
+        @dataclass
         class CustomClass(BaseImopayObj):
             foo: str
 
             def _validate_foo(self):
                 pass
 
-        obj = CustomClass()
+        obj = CustomClass.from_dict(None)
 
         result = obj._BaseImopayObj__get_validation_methods()
 
@@ -137,43 +138,97 @@ class BaseImopayObjTestCase(TestCase):
             with self.subTest(item):
                 self.assertTrue(callable(item))
 
+    def test_get_attr_name_from_method_1(self):
+        method = MagicMock(__name__="_validate_foo")
+
+        expected = "foo"
+
+        result = BaseImopayObj._BaseImopayObj__get_attr_name_from_method(method)
+
+        self.assertEqual(result, expected)
+
+    def test_get_field_1(self):
+        name = "foo"
+
+        mocked_field = MagicMock()
+
+        obj = MagicMock(__dataclass_fields__={name: mocked_field})
+
+        expected = mocked_field
+
+        result = BaseImopayObj._BaseImopayObj__get_field(obj, name)
+
+        self.assertEqual(result, expected)
+
+    def test_is_field_optional_1(self):
+        expected = True
+
+        mocked_field = MagicMock(optional=expected)
+
+        result = BaseImopayObj._BaseImopayObj__is_field_optional(mocked_field)
+
+        self.assertEqual(result, expected)
+
+    def test_is_field_optional_2(self):
+        expected = False
+
+        mocked_field = ""
+
+        result = BaseImopayObj._BaseImopayObj__is_field_optional(mocked_field)
+
+        self.assertEqual(result, expected)
+
     def test_run_validators_1(self):
         """
         Dado:
             - um objeto obj BaseImopayObj
             - um método qualquer mocked_validator_method
+                com __name__="_validate_foo"
             - BaseImopayObj._BaseImopayObj__get_validation_methods retornando
                 [mocked_validator_method]
+            - existe o campo 'foo' em obj com optional=False
         Quando:
             - for chamado obj._BaseImopayObj__run_validators()
         Então:
             - mocked_validator_method deve ter sido chamado uma vez
+            - BaseImopayObj._BaseImopayObj__get_field('foo') deve
+                ter sido chamado uma vez
         """
         obj = BaseImopayObj()
 
-        mocked_validator_method = MagicMock()
+        mocked_validator_method = MagicMock(__name__="_validate_foo")
 
         with patch(
             "imopay_wrapper.models.base.BaseImopayObj."
             "_BaseImopayObj__get_validation_methods"
-        ) as mocked_get_validation_methods:
+        ) as mocked_get_validation_methods, patch(
+            "imopay_wrapper.models.base.BaseImopayObj." "_BaseImopayObj__get_field"
+        ) as mocked_get_field:
+            mocked_get_field.return_value = MagicMock(optional=False)
+
             mocked_get_validation_methods.return_value = [mocked_validator_method]
 
             obj._BaseImopayObj__run_validators()
 
         mocked_validator_method.assert_called_once_with()
+        mocked_get_field.assert_called_once_with("foo")
 
     def test_run_validators_2(self):
         """
         Dado:
             - um objeto obj BaseImopayObj
             - um erro er1 FieldError("foo", "bar")
-            - um método qualquer mocked_validator_method que levante o error
+            - um método qualquer mocked_validator_method que levante o error e
+                com __name__="_validate_foo"
             - BaseImopayObj._BaseImopayObj__get_validation_methods retornando
                 [mocked_validator_method]
+            - existe o campo 'foo' em obj com optional=False
         Quando:
             - for chamado obj._BaseImopayObj__run_validators()
         Então:
+            - mocked_validator_method deve ter sido chamado uma vez
+            - BaseImopayObj._BaseImopayObj__get_field('foo') deve
+                ter sido chamado uma vez
             - deve ser lançado um erro er2 ValidationError
             - o er1 deve estar presente na lista de erros de er2
         """
@@ -181,20 +236,63 @@ class BaseImopayObjTestCase(TestCase):
 
         er1 = FieldError("foo", "bar")
 
-        mocked_validator_method = MagicMock(side_effect=er1)
+        mocked_validator_method = MagicMock(side_effect=er1, __name__="_validate_foo")
 
         with patch(
             "imopay_wrapper.models.base.BaseImopayObj."
             "_BaseImopayObj__get_validation_methods"
-        ) as mocked_get_validation_methods:
+        ) as mocked_get_validation_methods, patch(
+            "imopay_wrapper.models.base.BaseImopayObj." "_BaseImopayObj__get_field"
+        ) as mocked_get_field:
+            mocked_get_field.return_value = MagicMock(optional=False)
+
             mocked_get_validation_methods.return_value = [mocked_validator_method]
 
             with self.assertRaises(ValidationError) as ctx:
                 obj._BaseImopayObj__run_validators()
 
         mocked_validator_method.assert_called_once_with()
+        mocked_get_field.assert_called_once_with("foo")
 
         er2 = ctx.exception
 
         self.assertEqual(len(er2.errors), 1)
         self.assertEqual(er2.errors[0], er1)
+
+    def test_run_validators_3(self):
+        """
+        Dado:
+            - um objeto obj BaseImopayObj
+            - um erro er1 FieldError("foo", "bar")
+            - um método qualquer mocked_validator_method que levante o error e
+                com __name__="_validate_foo"
+            - BaseImopayObj._BaseImopayObj__get_validation_methods retornando
+                [mocked_validator_method]
+            - existe o campo 'foo' em obj com optional=True
+        Quando:
+            - for chamado obj._BaseImopayObj__run_validators()
+        Então:
+            - mocked_validator_method deve ter sido chamado uma vez
+            - BaseImopayObj._BaseImopayObj__get_field('foo') deve
+                ter sido chamado uma vez
+        """
+        obj = BaseImopayObj()
+
+        er1 = FieldError("foo", "bar")
+
+        mocked_validator_method = MagicMock(side_effect=er1, __name__="_validate_foo")
+
+        with patch(
+            "imopay_wrapper.models.base.BaseImopayObj."
+            "_BaseImopayObj__get_validation_methods"
+        ) as mocked_get_validation_methods, patch(
+            "imopay_wrapper.models.base.BaseImopayObj." "_BaseImopayObj__get_field"
+        ) as mocked_get_field:
+            mocked_get_field.return_value = MagicMock(optional=True)
+
+            mocked_get_validation_methods.return_value = [mocked_validator_method]
+
+            obj._BaseImopayObj__run_validators()
+
+        mocked_validator_method.assert_called_once_with()
+        mocked_get_field.assert_called_once_with("foo")

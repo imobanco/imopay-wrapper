@@ -15,23 +15,20 @@ class BaseImopayObj:
         pass
 
     @classmethod
-    def get_fields(cls):
+    def __get_fields(cls):
         # noinspection PyUnresolvedReferences
         return cls.__dataclass_fields__
 
-    def to_dict(self):
-        data = {}
-        for field_name, field in self.get_fields().items():
-            value = getattr(self, field_name)
+    def __get_field(self, name):
+        try:
+            # noinspection PyUnresolvedReferences
+            return self.__dataclass_fields__[name]
+        except KeyError as e:
+            raise AttributeError(f"Não existe o campo {name} em {self}") from e
 
-            if self.is_empty_value(value):
-                continue
-
-            if isinstance(value, BaseImopayObj):
-                data[field_name] = value.to_dict()
-            else:
-                data[field_name] = field.type(value)
-        return data
+    @staticmethod
+    def __is_field_optional(field):
+        return getattr(field, "optional", False)
 
     def __get_validation_methods(self):
         """
@@ -44,6 +41,14 @@ class BaseImopayObj:
 
         return validation_methods
 
+    @staticmethod
+    def __get_attr_name_from_method(method):
+        name = method.__name__
+
+        initial_index = len("_validate_")
+
+        return name[initial_index:]
+
     def __run_validators(self):
         """
         Método que executa todos os métodos de validação.
@@ -53,22 +58,34 @@ class BaseImopayObj:
         errors = []
 
         for method in validation_methods:
+            error = None
+            attr_name = self.__get_attr_name_from_method(method)
+            field = self.__get_field(attr_name)
             try:
                 method()
             except FieldError as e:
-                errors.append(e)
+                error = e
             except Exception as e:
-                errors.append(FieldError(method.__name__, str(e)))
+                error = FieldError(method.__name__, str(e))
+            finally:
+                if error is not None and not self.__is_field_optional(field):
+                    errors.append(error)
 
         if errors:
             raise ValidationError(self, errors)
 
+    @staticmethod
+    def __is_empty_value(value):
+        return value == "" or value is None
+
     @classmethod
     def from_dict(cls, data: Union[dict, Any]):
+        if data is None:
+            data = {}
 
         missing_fields = {
             field_name
-            for field_name in cls.get_fields().keys()
+            for field_name in cls.__get_fields().keys()
             if field_name not in data.keys()
         }
 
@@ -78,6 +95,16 @@ class BaseImopayObj:
         # noinspection PyArgumentList
         return cls(**data)
 
-    @staticmethod
-    def is_empty_value(value):
-        return value == "" or value is None
+    def to_dict(self):
+        data = {}
+        for field_name, field in self.__get_fields().items():
+            value = getattr(self, field_name)
+
+            if self.__is_empty_value(value):
+                continue
+
+            if isinstance(value, BaseImopayObj):
+                data[field_name] = value.to_dict()
+            else:
+                data[field_name] = field.type(value)
+        return data

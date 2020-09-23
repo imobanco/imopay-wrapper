@@ -230,7 +230,7 @@ class DiscountConfigurationTestCase(TestCase):
         """
         invalid_values_by_error = {
             FieldError: ["-1", "a"],
-            TypeError: [0, {}, [], None]
+            TypeError: [0, {}, [], None],
         }
 
         instance = MagicMock()
