@@ -128,6 +128,13 @@ class Invoice(BaseImopayObj):
     def _validate_configurations(self):
         validate_obj_attr_type(self, "configurations", dict)
 
+    def _validate_expiration_date(self):
+        validate_obj_attr_regex(self, "expiration_date", date_regex)
+
+    def _validate_limit_date(self):
+        # TODO validar
+        validate_obj_attr_regex(self, "limit_date", date_regex)
+
 
 @dataclass
 class InvoiceTransaction(BaseTransaction):
