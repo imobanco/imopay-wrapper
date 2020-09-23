@@ -57,6 +57,8 @@ class BaseImopayObj:
                 method()
             except FieldError as e:
                 errors.append(e)
+            except Exception as e:
+                errors.append(FieldError(method.__name__, str(e)))
 
         if errors:
             raise ValidationError(self, errors)
