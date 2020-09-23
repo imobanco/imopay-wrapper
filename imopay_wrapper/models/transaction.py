@@ -63,7 +63,7 @@ class DiscountConfiguration(FineConfiguration):
 
     def _validate_date(self):
         # TODO validar uma data válida? Mês, ano, dia?
-        # Utilizar pendulum caso sim!
+        #  Utilizar pendulum caso sim!
         validate_obj_attr_regex(self, "date", date_regex)
 
 
@@ -132,7 +132,8 @@ class Invoice(BaseImopayObj):
         validate_obj_attr_regex(self, "expiration_date", date_regex)
 
     def _validate_limit_date(self):
-        # TODO validar
+        # TODO validar que a data limite é
+        #  maior do que a data de expiração?
         validate_obj_attr_regex(self, "limit_date", date_regex)
 
 
