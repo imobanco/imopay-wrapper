@@ -2,6 +2,8 @@ from typing import List
 from dataclasses import dataclass, field
 
 from .base import BaseImopayObj
+from ..exceptions import FieldError
+from ..validators import validate_obj_attr_type, validate_obj_attr_in_collection
 
 
 @dataclass
@@ -15,27 +17,51 @@ class BaseTransaction(BaseImopayObj):
 
 @dataclass
 class Configuration(BaseImopayObj):
-    value: str
-    type: str
+    value: int
     charge_type: str
-    days: str
+
+    def _validate_value(self):
+        if self.value <= 0:
+            raise FieldError("value", "O valor é menor do que 1!")
+
+    def _validate_charge_type(self):
+        types = []
+        validate_obj_attr_in_collection(self, "charge_type", types)
+
+
+@dataclass
+class DiscountConfiguration(Configuration):
+    date: str
+
+    def _validate_date(self):
+        # TODO validar data!
+        pass
 
 
 @dataclass
 class InvoiceConfigurations(BaseImopayObj):
     fine: Configuration
     interest: Configuration
-    discounts: List[Configuration] = field(default=list)
+    discounts: List[DiscountConfiguration] = field(default=list)
 
-    def __post_init__(self):
-        if isinstance(self.fine, dict):
-            self.fine = Configuration.from_dict(self.fine)
-        if isinstance(self.interest, dict):
-            self.interest = Configuration.from_dict(self.interest)
+    def _validate_fine(self):
+        validate_obj_attr_type(self, "fine", dict)
+
+    def _validate_interest(self):
+        validate_obj_attr_type(self, "interest", dict)
+
+    def _validate_discounts(self):
+        validate_obj_attr_type(self, "discounts", list)
+
+        for discount in self.discounts:
+            validate_obj_attr_type(self, "discounts", dict, value=discount)
+
+    def _init_nested_fields(self):
+        self.fine = Configuration.from_dict(self.fine)
+        self.interest = Configuration.from_dict(self.interest)
         if self.discounts:
             for i, discount in enumerate(self.discounts):
-                if isinstance(discount, dict):
-                    self.discounts[i] = Configuration.from_dict(discount)
+                self.discounts[i] = DiscountConfiguration.from_dict(discount)
 
     def to_dict(self):
         """
@@ -62,15 +88,19 @@ class Invoice(BaseImopayObj):
     limit_date: str
     configurations: InvoiceConfigurations = field(default_factory=dict)
 
-    def __post_init__(self):
-        if isinstance(self.configurations, dict):
-            self.configurations = InvoiceConfigurations.from_dict(self.configurations)
+    def _init_nested_fields(self):
+        self.configurations = InvoiceConfigurations.from_dict(self.configurations)
+
+    def _validate_configurations(self):
+        validate_obj_attr_type(self, "configurations", dict)
 
 
 @dataclass
 class InvoiceTransaction(BaseTransaction):
     payment_method: Invoice
 
-    def __post_init__(self):
-        if isinstance(self.payment_method, dict):
-            self.payment_method = Invoice(**self.payment_method)
+    def _init_nested_fields(self):
+        self.payment_method = Invoice.from_dict(self.payment_method)
+
+    def _validate_payment_method(self):
+        validate_obj_attr_type(self, "payment_method", dict)
