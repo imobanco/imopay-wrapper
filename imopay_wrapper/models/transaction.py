@@ -20,13 +20,23 @@ class Configuration(BaseImopayObj):
     value: int
     charge_type: str
 
+    PERCENTAGE = 'p'
+    FIXED = 'f'
+    DAILY_FIXED = 'df'
+    DAILY_PERCENTAGE = 'dp'
+    MONTHLY_PERCENTAGE = 'mp'
+
+    VALID_CHARGE_TYPES = {
+        PERCENTAGE, FIXED, DAILY_FIXED, DAILY_PERCENTAGE, MONTHLY_PERCENTAGE
+    }
+
     def _validate_value(self):
+        self.value = int(self.value)
         if self.value <= 0:
             raise FieldError("value", "O valor é menor do que 1!")
 
     def _validate_charge_type(self):
-        types = []
-        validate_obj_attr_in_collection(self, "charge_type", types)
+        validate_obj_attr_in_collection(self, "charge_type", self.VALID_CHARGE_TYPES)
 
 
 @dataclass
