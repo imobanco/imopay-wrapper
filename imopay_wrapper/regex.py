@@ -1,1 +1,1 @@
-date_regex = "^\d{4}-\d{2}-\d{2}$"  # noqa
+date_regex = r"^\d{4}-\d{2}-\d{2}$"
