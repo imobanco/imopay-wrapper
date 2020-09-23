@@ -3,7 +3,8 @@ from dataclasses import dataclass, field
 
 from .base import BaseImopayObj
 from ..exceptions import FieldError
-from ..validators import validate_obj_attr_type, validate_obj_attr_in_collection
+from ..validators import validate_obj_attr_type, validate_obj_attr_in_collection, validate_obj_attr_regex
+from ..regex import date_regex
 
 
 @dataclass
@@ -16,19 +17,17 @@ class BaseTransaction(BaseImopayObj):
 
 
 @dataclass
-class Configuration(BaseImopayObj):
+class BaseConfiguration(BaseImopayObj):
     value: int
     charge_type: str
 
-    PERCENTAGE = 'p'
-    FIXED = 'f'
-    DAILY_FIXED = 'df'
-    DAILY_PERCENTAGE = 'dp'
-    MONTHLY_PERCENTAGE = 'mp'
+    PERCENTAGE = "p"
+    FIXED = "f"
+    DAILY_FIXED = "df"
+    DAILY_PERCENTAGE = "dp"
+    MONTHLY_PERCENTAGE = "mp"
 
-    VALID_CHARGE_TYPES = {
-        PERCENTAGE, FIXED, DAILY_FIXED, DAILY_PERCENTAGE, MONTHLY_PERCENTAGE
-    }
+    VALID_CHARGE_TYPES = {}
 
     def _validate_value(self):
         self.value = int(self.value)
@@ -40,18 +39,31 @@ class Configuration(BaseImopayObj):
 
 
 @dataclass
-class DiscountConfiguration(Configuration):
+class InterestConfiguration(BaseConfiguration):
+    VALID_CHARGE_TYPES = {
+        BaseConfiguration.DAILY_FIXED,
+        BaseConfiguration.DAILY_PERCENTAGE,
+        BaseConfiguration.MONTHLY_PERCENTAGE,
+    }
+
+
+@dataclass
+class FineConfiguration(BaseConfiguration):
+    VALID_CHARGE_TYPES = {BaseConfiguration.FIXED, BaseConfiguration.PERCENTAGE}
+
+
+@dataclass
+class DiscountConfiguration(FineConfiguration):
     date: str
 
     def _validate_date(self):
-        # TODO validar data!
-        pass
+        validate_obj_attr_regex(self, 'date', date_regex)
 
 
 @dataclass
 class InvoiceConfigurations(BaseImopayObj):
-    fine: Configuration
-    interest: Configuration
+    fine: FineConfiguration
+    interest: InterestConfiguration
     discounts: List[DiscountConfiguration] = field(default=list)
 
     def _validate_fine(self):
@@ -67,8 +79,8 @@ class InvoiceConfigurations(BaseImopayObj):
             validate_obj_attr_type(self, "discounts", dict, value=discount)
 
     def _init_nested_fields(self):
-        self.fine = Configuration.from_dict(self.fine)
-        self.interest = Configuration.from_dict(self.interest)
+        self.fine = BaseConfiguration.from_dict(self.fine)
+        self.interest = BaseConfiguration.from_dict(self.interest)
         if self.discounts:
             for i, discount in enumerate(self.discounts):
                 self.discounts[i] = DiscountConfiguration.from_dict(discount)
