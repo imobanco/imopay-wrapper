@@ -7,7 +7,7 @@ from ..exceptions import FieldError, ValidationError
 
 @dataclass
 class BaseImopayObj:
-    VALIDATION_METHOD_PATTERN = '_validate'
+    VALIDATION_METHOD_PATTERN = "_validate"
 
     def __post_init__(self):
         self.__run_validators()
@@ -50,7 +50,9 @@ class BaseImopayObj:
         """
         data = inspect.getmembers(self, predicate=inspect.ismethod)
 
-        validation_methods = [item[1] for item in data if self.VALIDATION_METHOD_PATTERN in item[0]]
+        validation_methods = [
+            item[1] for item in data if self.VALIDATION_METHOD_PATTERN in item[0]
+        ]
 
         return validation_methods
 

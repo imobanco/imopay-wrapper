@@ -16,7 +16,7 @@ class BaseImopayObjTestCase(TestCase):
         self.custom_class = CustomClass
 
     def test_validation_method_pattern(self):
-        expected = '_validate'
+        expected = "_validate"
 
         result = BaseImopayObj.VALIDATION_METHOD_PATTERN
 
@@ -179,9 +179,7 @@ class BaseImopayObjTestCase(TestCase):
         mocked_field = MagicMock()
 
         obj = MagicMock(
-            _BaseImopayObj__get_fields=MagicMock(
-                return_value={name: mocked_field}
-            )
+            _BaseImopayObj__get_fields=MagicMock(return_value={name: mocked_field})
         )
 
         expected = mocked_field
@@ -206,9 +204,7 @@ class BaseImopayObjTestCase(TestCase):
         mocked_field = MagicMock()
 
         obj = MagicMock(
-            _BaseImopayObj__get_fields=MagicMock(
-                return_value={'bar': mocked_field}
-            )
+            _BaseImopayObj__get_fields=MagicMock(return_value={"bar": mocked_field})
         )
 
         with self.assertRaises(AttributeError):
