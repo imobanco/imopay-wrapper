@@ -15,6 +15,13 @@ class BaseImopayObjTestCase(TestCase):
 
         self.custom_class = CustomClass
 
+    def test_validation_method_pattern(self):
+        expected = '_validate'
+
+        result = BaseImopayObj.VALIDATION_METHOD_PATTERN
+
+        self.assertEqual(result, expected)
+
     def test_is_empty_value(self):
         self.assertTrue(BaseImopayObj._BaseImopayObj__is_empty_value(""))
 
@@ -139,6 +146,15 @@ class BaseImopayObjTestCase(TestCase):
                 self.assertTrue(callable(item))
 
     def test_get_attr_name_from_method_1(self):
+        """
+        Dado:
+            - um método com
+                __name__="_validate_foo"
+        Quando:
+            - for chamado BaseImopayObj._BaseImopayObj__get_attr_name_from_method(method)
+        Então:
+            - o resultado deve ser "foo"
+        """
         method = MagicMock(__name__="_validate_foo")
 
         expected = "foo"
@@ -148,11 +164,25 @@ class BaseImopayObjTestCase(TestCase):
         self.assertEqual(result, expected)
 
     def test_get_field_1(self):
+        """
+        Dado:
+            - um nome 'foo'
+            - um campo qualquer mocked_field
+            - um objeto qualquer obj que tenha o campo foo: mocked_field
+        Quando:
+            - for chamado BaseImopayObj._BaseImopayObj__get_field(obj, name)
+        Então:
+            - o resultado deve ser mocked_field
+        """
         name = "foo"
 
         mocked_field = MagicMock()
 
-        obj = MagicMock(__dataclass_fields__={name: mocked_field})
+        obj = MagicMock(
+            _BaseImopayObj__get_fields=MagicMock(
+                return_value={name: mocked_field}
+            )
+        )
 
         expected = mocked_field
 
@@ -160,16 +190,73 @@ class BaseImopayObjTestCase(TestCase):
 
         self.assertEqual(result, expected)
 
-    def test_is_field_optional_1(self):
-        expected = True
+    def test_get_field_2(self):
+        """
+        Dado:
+            - um nome 'foo'
+            - um campo qualquer mocked_field
+            - um objeto qualquer obj que tenha o campo bar: mocked_field
+        Quando:
+            - for chamado BaseImopayObj._BaseImopayObj__get_field(obj, name)
+        Então:
+            - deve ser lançado um AttributeError
+        """
+        name = "foo"
 
-        mocked_field = MagicMock(optional=expected)
+        mocked_field = MagicMock()
+
+        obj = MagicMock(
+            _BaseImopayObj__get_fields=MagicMock(
+                return_value={'bar': mocked_field}
+            )
+        )
+
+        with self.assertRaises(AttributeError):
+            BaseImopayObj._BaseImopayObj__get_field(obj, name)
+
+    def test_is_field_optional_1(self):
+        """
+        Dado:
+            - um campo qualquer mocked_field optional=True
+        Quando:
+            - quando for chamado BaseImopayObj._BaseImopayObj__is_field_optional(mocked_field)
+        Então:
+            - o resultado deve ser True
+        """
+        mocked_field = MagicMock(optional=True)
+
+        expected = True
 
         result = BaseImopayObj._BaseImopayObj__is_field_optional(mocked_field)
 
         self.assertEqual(result, expected)
 
     def test_is_field_optional_2(self):
+        """
+        Dado:
+            - um campo qualquer mocked_field optional=False
+        Quando:
+            - quando for chamado BaseImopayObj._BaseImopayObj__is_field_optional(mocked_field)
+        Então:
+            - o resultado deve ser False
+        """
+        mocked_field = MagicMock(optional=False)
+
+        expected = False
+
+        result = BaseImopayObj._BaseImopayObj__is_field_optional(mocked_field)
+
+        self.assertEqual(result, expected)
+
+    def test_is_field_optional_3(self):
+        """
+        Dado:
+            - um campo qualquer mocked_field que não tenha o atributo optional
+        Quando:
+            - quando for chamado BaseImopayObj._BaseImopayObj__is_field_optional(mocked_field)
+        Então:
+            - o resultado deve ser False
+        """
         expected = False
 
         mocked_field = ""

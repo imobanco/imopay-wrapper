@@ -7,6 +7,8 @@ from ..exceptions import FieldError, ValidationError
 
 @dataclass
 class BaseImopayObj:
+    VALIDATION_METHOD_PATTERN = '_validate'
+
     def __post_init__(self):
         self.__run_validators()
         self._init_nested_fields()
@@ -16,18 +18,29 @@ class BaseImopayObj:
 
     @classmethod
     def __get_fields(cls):
+        """
+        Método para retornar todos os campos!
+        """
         # noinspection PyUnresolvedReferences
         return cls.__dataclass_fields__
 
     def __get_field(self, name):
+        """
+        Método para retornar um campo com base no nome passado!
+        """
         try:
             # noinspection PyUnresolvedReferences
-            return self.__dataclass_fields__[name]
+            return self.__get_fields()[name]
         except KeyError as e:
             raise AttributeError(f"Não existe o campo {name} em {self}") from e
 
     @staticmethod
     def __is_field_optional(field):
+        """
+        Método para verificar se um campo é opcional ou não!
+
+        Influência na validação!
+        """
         return getattr(field, "optional", False)
 
     def __get_validation_methods(self):
@@ -37,15 +50,19 @@ class BaseImopayObj:
         """
         data = inspect.getmembers(self, predicate=inspect.ismethod)
 
-        validation_methods = [item[1] for item in data if "_validate" in item[0]]
+        validation_methods = [item[1] for item in data if self.VALIDATION_METHOD_PATTERN in item[0]]
 
         return validation_methods
 
     @staticmethod
     def __get_attr_name_from_method(method):
+        """
+        Método para retornar o nome do atributo/campo a partir de
+        um método de validação (que siga o padrão `_validate_attr`).
+        """
         name = method.__name__
 
-        initial_index = len("_validate_")
+        initial_index = len(BaseImopayObj.VALIDATION_METHOD_PATTERN) + 1
 
         return name[initial_index:]
 
