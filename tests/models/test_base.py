@@ -178,11 +178,7 @@ class BaseImopayObjTestCase(TestCase):
 
         mocked_field = MagicMock()
 
-        obj = MagicMock(
-            _BaseImopayObj__get_fields=MagicMock(
-                return_value={field_name: mocked_field}
-            )
-        )
+        obj = MagicMock(get_fields=MagicMock(return_value={field_name: mocked_field}))
 
         expected = mocked_field
 
@@ -205,9 +201,7 @@ class BaseImopayObjTestCase(TestCase):
 
         mocked_field = MagicMock()
 
-        obj = MagicMock(
-            _BaseImopayObj__get_fields=MagicMock(return_value={"bar": mocked_field})
-        )
+        obj = MagicMock(get_fields=MagicMock(return_value={"bar": mocked_field}))
 
         with self.assertRaises(AttributeError):
             BaseImopayObj._BaseImopayObj__get_field(obj, field_name)
