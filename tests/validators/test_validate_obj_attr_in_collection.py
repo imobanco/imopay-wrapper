@@ -25,22 +25,6 @@ class ValidateObjAttrInCollectionTestCase(TestCase):
     def test_2(self):
         """
         Dado:
-            - um objeto obj qualquer que não tenha foo="bar"
-            - uma coleção collection ["bar"]
-        Quando:
-            - for chamado validate_obj_attr_in_collection(obj, "foo", collection, value="bar")  # noqa
-        Então:
-            - N/A
-        """
-        obj = MagicMock()
-
-        collection = ["bar"]
-
-        validate_obj_attr_in_collection(obj, "foo", collection, value="bar")
-
-    def test_3(self):
-        """
-        Dado:
             - um objeto obj qualquer que tenha foo="bar"
             - uma coleção collection [1]
         Quando:
@@ -55,28 +39,6 @@ class ValidateObjAttrInCollectionTestCase(TestCase):
 
         with self.assertRaises(FieldError) as ctx:
             validate_obj_attr_in_collection(obj, "foo", collection)
-
-        self.assertEqual(ctx.exception.name, "foo")
-        self.assertIn("bar não está na coleção", ctx.exception.reason)
-        self.assertIn(str(collection), ctx.exception.reason)
-
-    def test_4(self):
-        """
-        Dado:
-            - um objeto obj qualquer que não tenha foo="bar"
-            - uma coleção collection [1]
-        Quando:
-            - for chamado validate_obj_attr_in_collection(obj, "foo", collection, value="bar")  # noqa
-        Então:
-            - deve ser lançado um FieldError
-            - o texto do erro lançado deve estar correto!
-        """
-        obj = MagicMock()
-
-        collection = [1]
-
-        with self.assertRaises(FieldError) as ctx:
-            validate_obj_attr_in_collection(obj, "foo", collection, value="bar")
 
         self.assertEqual(ctx.exception.name, "foo")
         self.assertIn("bar não está na coleção", ctx.exception.reason)

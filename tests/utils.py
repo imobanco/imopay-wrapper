@@ -1,5 +1,22 @@
+from datetime import date, timedelta
 from unittest import TestCase
 from unittest.mock import patch, PropertyMock
+
+
+def today():
+    return date.today().strftime("%Y-%m-%d")
+
+
+def tomorrow():
+    d = date.today()
+    d += timedelta(days=1)
+    return d.strftime("%Y-%m-%d")
+
+
+def yesterday():
+    d = date.today()
+    d -= timedelta(days=1)
+    return d.strftime("%Y-%m-%d")
 
 
 class LocalImopayTestCase(TestCase):
