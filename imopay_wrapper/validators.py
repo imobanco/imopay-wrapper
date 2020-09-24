@@ -65,7 +65,7 @@ def validate_date_1_gt_date_2(attr, d1, d2, allow_equal=False):
     """
     Método para validar se data 1 é maior do que data 2.
 
-    Caso strict seja False, data 1 pode ser igual a data 2.
+    Caso allow_equal seja True, data 1 pode ser igual à data 2.
     """
     if allow_equal:
         if d1 < d2:
@@ -83,6 +83,9 @@ def validate_date_isoformat(
     https://en.wikipedia.org/wiki/ISO_8601
 
     É possível validar se é uma data futura ou passada também!
+
+    Com o allow_today é possível flexibilizar de que é
+    permitido a data de hoje ou ão!
     """
     if past and future:
         raise ValueError(

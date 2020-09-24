@@ -10,6 +10,7 @@ class ValidateDate1gtDate2TestCase(TestCase):
         Dado:
             - uma data válida d1 "2020-08-29"
             - uma data válida d2 "2020-08-28"
+            - um nome de atributo qualquer "foo"
         Quando:
             - for chamado validate_date_1_gt_date_2("foo", d1, d2)
         Então:
@@ -24,6 +25,7 @@ class ValidateDate1gtDate2TestCase(TestCase):
         Dado:
             - uma data válida d1 "2020-08-28"
             - uma data válida d2 "2020-08-29"
+            - um nome de atributo qualquer "foo"
         Quando:
             - for chamado validate_date_1_gt_date_2("foo", d1, d2)
         Então:
@@ -46,6 +48,7 @@ class ValidateDate1gtDate2TestCase(TestCase):
         Dado:
             - uma data válida d1 "2020-08-28"
             - uma data válida d2 "2020-08-29"
+            - um nome de atributo qualquer "foo"
         Quando:
             - for chamado validate_date_1_gt_date_2("foo", d1, d2, allow_equal=True)
         Então:
@@ -66,6 +69,7 @@ class ValidateDate1gtDate2TestCase(TestCase):
         Dado:
             - uma data válida d1 "2020-08-28"
             - uma data válida d2 "2020-08-28"
+            - um nome de atributo qualquer "foo"
         Quando:
             - for chamado validate_date_1_gt_date_2("foo", d1, d2)
         Então:
@@ -88,6 +92,7 @@ class ValidateDate1gtDate2TestCase(TestCase):
         Dado:
             - uma data válida d1 "2020-08-28"
             - uma data válida d2 "2020-08-28"
+            - um nome de atributo qualquer "foo"
         Quando:
             - for chamado validate_date_1_gt_date_2("foo", d1, d2, allow_equal=True)
         Então:
