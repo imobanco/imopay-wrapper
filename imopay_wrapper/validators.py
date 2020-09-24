@@ -75,7 +75,9 @@ def validate_date_1_gt_date_2(attr, d1, d2, allow_equal=False):
         raise FieldError(attr, f"{d1} não é estritamente maior do que {d2}")
 
 
-def validate_date_isoformat(obj, attr, future=None, past=None, allow_today=False, value=None):
+def validate_date_isoformat(
+    obj, attr, future=None, past=None, allow_today=False, value=None
+):
     """
     Método para validar uma data que siga a iso YYYY-mm-dd
     https://en.wikipedia.org/wiki/ISO_8601
@@ -83,7 +85,9 @@ def validate_date_isoformat(obj, attr, future=None, past=None, allow_today=False
     É possível validar se é uma data futura ou passada também!
     """
     if past and future:
-        raise ValueError("Não se pode verificar se é uma data futura e passada ao mesmo tempo!")
+        raise ValueError(
+            "Não se pode verificar se é uma data futura e passada ao mesmo tempo!"
+        )
 
     value = _get_value_from_attr_or_value(obj, attr, value=value)
 

@@ -1,6 +1,7 @@
 from unittest import TestCase
 from unittest.mock import MagicMock, patch
 
+from ...utils import today, yesterday
 from imopay_wrapper.models.transaction import (
     BaseConfiguration,
     InterestConfiguration,
@@ -203,7 +204,7 @@ class DiscountConfigurationTestCase(TestCase):
         Então:
             - N/A
         """
-        valid_values = ["2020-08-28", "0000-18-00", "2020-12-20"]
+        valid_values = [today(), yesterday()]
 
         instance = MagicMock()
 
@@ -231,7 +232,7 @@ class DiscountConfigurationTestCase(TestCase):
             - deve ser lançado o erro específico para cada valor
         """
         invalid_values_by_error = {
-            FieldError: ["-1", "a"],
+            ValueError: ["-1", "a"],
             TypeError: [0, {}, [], None],
         }
 

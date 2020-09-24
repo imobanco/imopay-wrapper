@@ -7,7 +7,7 @@ from imopay_wrapper.validators import validate_date_isoformat
 from imopay_wrapper.exceptions import FieldError
 
 
-class ValidateDateIsoformatTestCase(TestCase):    
+class ValidateDateIsoformatTestCase(TestCase):
     def test_1(self):
         """
         Dado:
@@ -38,7 +38,7 @@ class ValidateDateIsoformatTestCase(TestCase):
         """
         invalid_mapping_error_values = {
             ValueError: ["28/08/2020", "abc"],
-            TypeError: [1, None, {}]
+            TypeError: [1, None, {}],
         }
 
         obj = MagicMock()
@@ -67,7 +67,7 @@ class ValidateDateIsoformatTestCase(TestCase):
         Dado:
             - um objeto obj qualquer que tenha foo com a data de hoje
         Quando:
-            - for chamado validate_date_isoformat(obj, "foo", future=True, allow_today=True)
+            - for chamado validate_date_isoformat(obj, "foo", future=True, allow_today=True)  # noqa
         Então:
             - N/A
         """
@@ -80,7 +80,7 @@ class ValidateDateIsoformatTestCase(TestCase):
         Dado:
             - um objeto obj qualquer que tenha foo com a data de hoje
         Quando:
-            - for chamado validate_date_isoformat(obj, "foo", future=True, allow_today=False)
+            - for chamado validate_date_isoformat(obj, "foo", future=True, allow_today=False)  # noqa
         Então:
             - deve ser lançado um FieldError
             - o texto do erro deve ser correto
@@ -129,7 +129,7 @@ class ValidateDateIsoformatTestCase(TestCase):
         Dado:
             - um objeto obj qualquer que tenha foo com a data de hoje
         Quando:
-            - for chamado validate_date_isoformat(obj, "foo", past=True, allow_today=True)
+            - for chamado validate_date_isoformat(obj, "foo", past=True, allow_today=True)  # noqa
         Então:
             - N/A
         """
@@ -142,7 +142,7 @@ class ValidateDateIsoformatTestCase(TestCase):
         Dado:
             - um objeto obj qualquer que tenha foo com a data de hoje
         Quando:
-            - for chamado validate_date_isoformat(obj, "foo", past=True, allow_today=False)
+            - for chamado validate_date_isoformat(obj, "foo", past=True, allow_today=False)  # noqa
         Então:
             - deve ser lançado um FieldError
             - o texto da exceção deve ser correto
@@ -179,4 +179,7 @@ class ValidateDateIsoformatTestCase(TestCase):
         with self.assertRaises(ValueError) as ctx:
             validate_date_isoformat("", "", future=True, past=True)
 
-        self.assertIn("Não se pode verificar se é uma data futura e passada ao mesmo tempo!", str(ctx.exception))
+        self.assertIn(
+            "Não se pode verificar se é uma data futura e passada ao mesmo tempo!",
+            str(ctx.exception),
+        )

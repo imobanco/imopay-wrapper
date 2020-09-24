@@ -37,7 +37,9 @@ class ValidateDate1gtDate2TestCase(TestCase):
             validate_date_1_gt_date_2("foo", d1, d2)
 
         self.assertEqual(ctx.exception.name, "foo")
-        self.assertIn(f"{d1} não é estritamente maior do que {d2}", ctx.exception.reason)
+        self.assertIn(
+            f"{d1} não é estritamente maior do que {d2}", ctx.exception.reason
+        )
 
     def test_3(self):
         """
@@ -77,7 +79,9 @@ class ValidateDate1gtDate2TestCase(TestCase):
             validate_date_1_gt_date_2("foo", d1, d2)
 
         self.assertEqual(ctx.exception.name, "foo")
-        self.assertIn(f"{d1} não é estritamente maior do que {d2}", ctx.exception.reason)
+        self.assertIn(
+            f"{d1} não é estritamente maior do que {d2}", ctx.exception.reason
+        )
 
     def test_5(self):
         """

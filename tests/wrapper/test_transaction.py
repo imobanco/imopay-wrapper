@@ -1,6 +1,6 @@
 from unittest.mock import patch
 
-from ..utils import LocalImopayTestCase
+from ..utils import LocalImopayTestCase, today, tomorrow
 from imopay_wrapper import ImopayWrapper
 from imopay_wrapper.models.transaction import BaseConfiguration
 
@@ -20,8 +20,8 @@ class TransactionWrapperTestCase(LocalImopayTestCase):
             "amount": 4,
             "description": "5",
             "payment_method": {
-                "expiration_date": "2020-08-28",
-                "limit_date": "2020-08-28",
+                "expiration_date": today(),
+                "limit_date": tomorrow(),
                 "configurations": {
                     "fine": {
                         "value": 1,
@@ -35,7 +35,7 @@ class TransactionWrapperTestCase(LocalImopayTestCase):
                         {
                             "value": 1,
                             "charge_type": BaseConfiguration.FIXED,
-                            "date": "2020-08-28",
+                            "date": today(),
                         }
                     ],
                 },
@@ -57,8 +57,8 @@ class TransactionWrapperTestCase(LocalImopayTestCase):
                     "amount": "4",
                     "description": "5",
                     "payment_method": {
-                        "expiration_date": "2020-08-28",
-                        "limit_date": "2020-08-28",
+                        "expiration_date": today(),
+                        "limit_date": tomorrow(),
                         "configurations": {
                             "fine": {
                                 "value": 1,
@@ -72,7 +72,7 @@ class TransactionWrapperTestCase(LocalImopayTestCase):
                                 {
                                     "value": 1,
                                     "charge_type": BaseConfiguration.FIXED,
-                                    "date": "2020-08-28",
+                                    "date": today(),
                                 }
                             ],
                         },

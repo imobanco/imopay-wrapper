@@ -62,7 +62,7 @@ class DiscountConfiguration(FineConfiguration):
     date: str
 
     def _validate_date(self):
-        validate_date_isoformat(self, "date", past=True)
+        validate_date_isoformat(self, "date", past=True, allow_today=True)
 
 
 @dataclass
@@ -127,11 +127,13 @@ class Invoice(BaseImopayObj):
         validate_obj_attr_type(self, "configurations", dict)
 
     def _validate_expiration_date(self):
-        validate_date_isoformat(self, "expiration_date", future=True)
+        validate_date_isoformat(self, "expiration_date", future=True, allow_today=True)
 
     def _validate_limit_date(self):
-        validate_date_isoformat(self, "limit_date", future=True)
-        validate_date_1_gt_date_2("limit_date", self.limit_date, self.expiration_date)
+        validate_date_isoformat(self, "limit_date", future=True, allow_today=True)
+        validate_date_1_gt_date_2(
+            "limit_date", self.limit_date, self.expiration_date, allow_equal=True
+        )
 
 
 @dataclass

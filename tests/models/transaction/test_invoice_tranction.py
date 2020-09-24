@@ -1,6 +1,7 @@
 from unittest import TestCase
 from unittest.mock import MagicMock
 
+from ...utils import today, tomorrow
 from imopay_wrapper.models.transaction import InvoiceTransaction, Invoice
 from imopay_wrapper.exceptions import FieldError
 
@@ -39,11 +40,11 @@ class InvoiceTransactionTestCase(TestCase):
 
     def test_2(self):
         instance: InvoiceTransaction = MagicMock(
-            payment_method={"expiration_date": "2020-08-28", "limit_date": "2020-08-28"}
+            payment_method={"expiration_date": today(), "limit_date": tomorrow()}
         )
 
         InvoiceTransaction._init_nested_fields(instance)
 
         self.assertIsInstance(instance.payment_method, Invoice)
-        self.assertEqual(instance.payment_method.expiration_date, "2020-08-28")
-        self.assertEqual(instance.payment_method.limit_date, "2020-08-28")
+        self.assertEqual(instance.payment_method.expiration_date, today())
+        self.assertEqual(instance.payment_method.limit_date, tomorrow())

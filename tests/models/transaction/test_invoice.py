@@ -1,6 +1,7 @@
 from unittest import TestCase
 from unittest.mock import MagicMock
 
+from ...utils import today, tomorrow
 from imopay_wrapper.models.transaction import Invoice, BaseConfiguration
 from imopay_wrapper.exceptions import FieldError
 
@@ -48,7 +49,7 @@ class InvoiceTestCase(TestCase):
         Então:
             - N/A
         """
-        valid_values = ["2020-08-28", "0000-18-00", "2020-12-20"]
+        valid_values = [today(), tomorrow()]
 
         instance = MagicMock()
 
@@ -76,7 +77,7 @@ class InvoiceTestCase(TestCase):
             - deve ser lançado o erro específico para cada valor
         """
         invalid_values_by_error = {
-            FieldError: ["-1", "a"],
+            ValueError: ["-1", "a"],
             TypeError: [0, {}, [], None],
         }
 
@@ -102,12 +103,13 @@ class InvoiceTestCase(TestCase):
         Então:
             - N/A
         """
-        valid_values = ["2020-08-28", "0000-18-00", "2020-12-20"]
+        valid_values = [today(), tomorrow()]
 
         instance = MagicMock()
 
         for value in valid_values:
             with self.subTest(value):
+                instance.expiration_date = value
                 instance.limit_date = value
                 # noinspection PyCallByClass
                 Invoice._validate_limit_date(instance)
@@ -130,7 +132,7 @@ class InvoiceTestCase(TestCase):
             - deve ser lançado o erro específico para cada valor
         """
         invalid_values_by_error = {
-            FieldError: ["-1", "a"],
+            ValueError: ["-1", "a"],
             TypeError: [0, {}, [], None],
         }
 
