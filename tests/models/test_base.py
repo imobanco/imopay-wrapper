@@ -348,6 +348,55 @@ class BaseImopayObjTestCase(TestCase):
         """
         Dado:
             - um objeto obj BaseImopayObj
+            - um erro er1 ValueError("bar")
+            - um método qualquer mocked_validator_method que levante o error e
+                com __name__="_validate_foo"
+            - BaseImopayObj._BaseImopayObj__get_validation_methods retornando
+                [mocked_validator_method]
+            - existe o campo 'foo' em obj com optional=False
+        Quando:
+            - for chamado obj._BaseImopayObj__run_validators()
+        Então:
+            - mocked_validator_method deve ter sido chamado uma vez
+            - BaseImopayObj._BaseImopayObj__get_field('foo') deve
+                ter sido chamado uma vez
+            - deve ser lançado um erro er2 ValidationError
+            - o erro presente na lista de erros de er2 deve estar correto
+        """
+        obj = BaseImopayObj()
+
+        er1 = ValueError("bar")
+
+        mocked_validator_method = MagicMock(side_effect=er1, __name__="_validate_foo")
+
+        with patch(
+            "imopay_wrapper.models.base.BaseImopayObj."
+            "_BaseImopayObj__get_validation_methods"
+        ) as mocked_get_validation_methods, patch(
+            "imopay_wrapper.models.base.BaseImopayObj." "_BaseImopayObj__get_field"
+        ) as mocked_get_field:
+            mocked_get_field.return_value = MagicMock(optional=False)
+
+            mocked_get_validation_methods.return_value = [mocked_validator_method]
+
+            with self.assertRaises(ValidationError) as ctx:
+                obj._BaseImopayObj__run_validators()
+
+        mocked_validator_method.assert_called_once_with()
+        mocked_get_field.assert_called_once_with("foo")
+
+        er2 = ctx.exception
+
+        self.assertEqual(len(er2.errors), 1)
+
+        result_error = er2.errors[0]
+        self.assertEqual(result_error.name, mocked_validator_method.__name__)
+        self.assertEqual(result_error.reason, str(er1))
+
+    def test_run_validators_4(self):
+        """
+        Dado:
+            - um objeto obj BaseImopayObj
             - um erro er1 FieldError("foo", "bar")
             - um método qualquer mocked_validator_method que levante o error e
                 com __name__="_validate_foo"
