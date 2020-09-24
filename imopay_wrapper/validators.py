@@ -84,8 +84,8 @@ def validate_date_isoformat(
 
     É possível validar se é uma data futura ou passada também!
 
-    Com o allow_today é possível flexibilizar de que é
-    permitido a data de hoje ou ão!
+    Com o allow_today é possível flexibilizar se é
+    permitido a data de hoje ou não!
     """
     if past and future:
         raise ValueError(
