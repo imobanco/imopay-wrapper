@@ -17,7 +17,7 @@ class BaseImopayObj:
         pass
 
     @classmethod
-    def __get_fields(cls):
+    def get_fields(cls):
         """
         Método para retornar todos os campos!
         """
@@ -30,7 +30,7 @@ class BaseImopayObj:
         """
         try:
             # noinspection PyUnresolvedReferences
-            return self.__get_fields()[name]
+            return self.get_fields()[name]
         except KeyError as e:
             raise AttributeError(f"Não existe o campo {name} em {self}") from e
 
@@ -104,7 +104,7 @@ class BaseImopayObj:
 
         missing_fields = {
             field_name
-            for field_name in cls.__get_fields().keys()
+            for field_name in cls.get_fields().keys()
             if field_name not in data.keys()
         }
 
@@ -116,7 +116,7 @@ class BaseImopayObj:
 
     def to_dict(self):
         data = {}
-        for field_name, field in self.__get_fields().items():
+        for field_name, field in self.get_fields().items():
             value = getattr(self, field_name)
 
             if self.__is_empty_value(value):
