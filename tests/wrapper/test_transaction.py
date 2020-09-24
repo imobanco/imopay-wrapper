@@ -1,7 +1,8 @@
 from unittest.mock import patch
 
-from ..utils import LocalImopayTestCase
+from ..utils import LocalImopayTestCase, today, tomorrow
 from imopay_wrapper import ImopayWrapper
+from imopay_wrapper.models.transaction import BaseConfiguration
 
 
 class TransactionWrapperTestCase(LocalImopayTestCase):
@@ -19,23 +20,23 @@ class TransactionWrapperTestCase(LocalImopayTestCase):
             "amount": 4,
             "description": "5",
             "payment_method": {
-                "expiration_date": "6",
-                "limit_date": "7",
+                "expiration_date": today(),
+                "limit_date": tomorrow(),
                 "configurations": {
                     "fine": {
-                        "type": "8",
-                        "charge_type": "9",
-                        "value": "10",
-                        "days": "11",
+                        "value": 1,
+                        "charge_type": BaseConfiguration.FIXED,
                     },
                     "interest": {
-                        "type": "12",
-                        "charge_type": "13",
-                        "value": "14",
-                        "days": "15",
+                        "value": 1,
+                        "charge_type": BaseConfiguration.DAILY_FIXED,
                     },
                     "discounts": [
-                        {"type": "16", "charge_type": "17", "value": "18", "days": "19"}
+                        {
+                            "value": 1,
+                            "charge_type": BaseConfiguration.FIXED,
+                            "date": today(),
+                        }
                     ],
                 },
             },
@@ -56,27 +57,22 @@ class TransactionWrapperTestCase(LocalImopayTestCase):
                     "amount": "4",
                     "description": "5",
                     "payment_method": {
-                        "expiration_date": "6",
-                        "limit_date": "7",
+                        "expiration_date": today(),
+                        "limit_date": tomorrow(),
                         "configurations": {
                             "fine": {
-                                "type": "8",
-                                "charge_type": "9",
-                                "value": "10",
-                                "days": "11",
+                                "value": 1,
+                                "charge_type": BaseConfiguration.FIXED,
                             },
                             "interest": {
-                                "type": "12",
-                                "charge_type": "13",
-                                "value": "14",
-                                "days": "15",
+                                "value": 1,
+                                "charge_type": BaseConfiguration.DAILY_FIXED,
                             },
                             "discounts": [
                                 {
-                                    "type": "16",
-                                    "charge_type": "17",
-                                    "value": "18",
-                                    "days": "19",
+                                    "value": 1,
+                                    "charge_type": BaseConfiguration.FIXED,
+                                    "date": today(),
                                 }
                             ],
                         },

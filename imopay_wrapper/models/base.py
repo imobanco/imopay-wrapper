@@ -7,6 +7,8 @@ from ..exceptions import FieldError, ValidationError
 
 @dataclass
 class BaseImopayObj:
+    VALIDATION_METHOD_PATTERN = "_validate"
+
     def __post_init__(self):
         self.__run_validators()
         self._init_nested_fields()
@@ -15,23 +17,31 @@ class BaseImopayObj:
         pass
 
     @classmethod
-    def get_fields(cls):
+    def __get_fields(cls):
+        """
+        Método para retornar todos os campos!
+        """
         # noinspection PyUnresolvedReferences
         return cls.__dataclass_fields__
 
-    def to_dict(self):
-        data = {}
-        for field_name, field in self.get_fields().items():
-            value = getattr(self, field_name)
+    def __get_field(self, name):
+        """
+        Método para retornar um campo com base no nome passado!
+        """
+        try:
+            # noinspection PyUnresolvedReferences
+            return self.__get_fields()[name]
+        except KeyError as e:
+            raise AttributeError(f"Não existe o campo {name} em {self}") from e
 
-            if self.is_empty_value(value):
-                continue
+    @staticmethod
+    def __is_field_optional(field):
+        """
+        Método para verificar se um campo é opcional ou não!
 
-            if isinstance(value, BaseImopayObj):
-                data[field_name] = value.to_dict()
-            else:
-                data[field_name] = field.type(value)
-        return data
+        Influência na validação!
+        """
+        return getattr(field, "optional", False)
 
     def __get_validation_methods(self):
         """
@@ -40,9 +50,23 @@ class BaseImopayObj:
         """
         data = inspect.getmembers(self, predicate=inspect.ismethod)
 
-        validation_methods = [item[1] for item in data if "_validate" in item[0]]
+        validation_methods = [
+            item[1] for item in data if self.VALIDATION_METHOD_PATTERN in item[0]
+        ]
 
         return validation_methods
+
+    @staticmethod
+    def __get_attr_name_from_method(method):
+        """
+        Método para retornar o nome do atributo/campo a partir de
+        um método de validação (que siga o padrão `_validate_attr`).
+        """
+        name = method.__name__
+
+        initial_index = len(BaseImopayObj.VALIDATION_METHOD_PATTERN) + 1
+
+        return name[initial_index:]
 
     def __run_validators(self):
         """
@@ -53,20 +77,34 @@ class BaseImopayObj:
         errors = []
 
         for method in validation_methods:
+            error = None
+            attr_name = self.__get_attr_name_from_method(method)
+            field = self.__get_field(attr_name)
             try:
                 method()
             except FieldError as e:
-                errors.append(e)
+                error = e
+            except Exception as e:
+                error = FieldError(method.__name__, str(e))
+            finally:
+                if error is not None and not self.__is_field_optional(field):
+                    errors.append(error)
 
         if errors:
             raise ValidationError(self, errors)
 
+    @staticmethod
+    def __is_empty_value(value):
+        return value == "" or value is None
+
     @classmethod
     def from_dict(cls, data: Union[dict, Any]):
+        if data is None:
+            data = {}
 
         missing_fields = {
             field_name
-            for field_name in cls.get_fields().keys()
+            for field_name in cls.__get_fields().keys()
             if field_name not in data.keys()
         }
 
@@ -76,6 +114,16 @@ class BaseImopayObj:
         # noinspection PyArgumentList
         return cls(**data)
 
-    @staticmethod
-    def is_empty_value(value):
-        return value == "" or value is None
+    def to_dict(self):
+        data = {}
+        for field_name, field in self.__get_fields().items():
+            value = getattr(self, field_name)
+
+            if self.__is_empty_value(value):
+                continue
+
+            if isinstance(value, BaseImopayObj):
+                data[field_name] = value.to_dict()
+            else:
+                data[field_name] = field.type(value)
+        return data

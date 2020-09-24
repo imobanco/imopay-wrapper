@@ -1,31 +1,31 @@
 from unittest import TestCase
 
-from imopay_wrapper.models.transaction import InvoiceConfigurations, Configuration
+from imopay_wrapper.models.transaction import InvoiceConfigurations, BaseConfiguration
 
 
 class InvoiceConfigurationsTestCase(TestCase):
     def test_1(self):
         t = InvoiceConfigurations.from_dict(
-            {
-                "fine": Configuration.from_dict(
-                    {"value": 1, "type": "foo", "charge_type": "foo", "days": 0}
-                )
-            }
+            {"fine": {"value": 1, "charge_type": BaseConfiguration.PERCENTAGE}}
         )
         self.assertEqual(t.fine.value, 1)
 
     def test_2(self):
         t = InvoiceConfigurations.from_dict(
-            {"fine": {"value": 1, "type": "foo", "charge_type": "foo", "days": 0}}
+            {"interest": {"value": 1, "charge_type": BaseConfiguration.DAILY_FIXED}}
         )
-        self.assertEqual(t.fine.value, 1)
+        self.assertEqual(t.interest.value, 1)
 
     def test_3(self):
         t = InvoiceConfigurations.from_dict(
             {
-                "fine": Configuration.from_dict(
-                    {"value": 1, "type": "foo", "charge_type": "foo", "days": 0}
-                )
+                "discounts": [
+                    {
+                        "value": 1,
+                        "charge_type": BaseConfiguration.FIXED,
+                        "date": "2020-08-28",
+                    }
+                ]
             }
         )
-        t.to_dict()
+        self.assertEqual(t.discounts[0].value, 1)

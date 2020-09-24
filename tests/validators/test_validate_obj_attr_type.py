@@ -22,19 +22,6 @@ class ValidateObjAttrTypeTestCase(TestCase):
     def test_2(self):
         """
         Dado:
-            - um objeto obj qualquer que não tenha foo="bar"
-        Quando:
-            - for chamado validate_obj_attr_type(obj, "foo", str, value="bar")
-        Então:
-            - N/A
-        """
-        obj = MagicMock()
-
-        validate_obj_attr_type(obj, "foo", str, value="bar")
-
-    def test_3(self):
-        """
-        Dado:
             - um objeto obj qualquer que tenha foo="bar"
         Quando:
             - for chamado validate_obj_attr_type(obj, "foo", int)
@@ -46,25 +33,6 @@ class ValidateObjAttrTypeTestCase(TestCase):
 
         with self.assertRaises(FieldError) as ctx:
             validate_obj_attr_type(obj, "foo", int)
-
-        self.assertEqual(ctx.exception.name, "foo")
-        self.assertIn("bar não é do tipo", ctx.exception.reason)
-        self.assertIn(str(int), ctx.exception.reason)
-
-    def test_4(self):
-        """
-        Dado:
-            - um objeto obj qualquer que não tenha foo="bar"
-        Quando:
-            - for chamado validate_obj_attr_type(obj, "foo", int, value="bar")
-        Então:
-            - deve ser lançado um FieldError
-            - o texto do erro deve estar correto
-        """
-        obj = MagicMock()
-
-        with self.assertRaises(FieldError) as ctx:
-            validate_obj_attr_type(obj, "foo", int, value="bar")
 
         self.assertEqual(ctx.exception.name, "foo")
         self.assertIn("bar não é do tipo", ctx.exception.reason)
