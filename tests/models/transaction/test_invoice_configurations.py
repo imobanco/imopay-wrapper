@@ -1,5 +1,6 @@
 from unittest import TestCase
 
+from ...utils import today
 from imopay_wrapper.models.transaction import InvoiceConfigurations, BaseConfiguration
 
 
@@ -23,7 +24,7 @@ class InvoiceConfigurationsTestCase(TestCase):
                     {
                         "value": 1,
                         "charge_type": BaseConfiguration.FIXED,
-                        "date": "2020-08-28",
+                        "date": today(),
                     }
                 ]
             }

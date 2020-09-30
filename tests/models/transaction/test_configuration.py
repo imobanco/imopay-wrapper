@@ -1,7 +1,7 @@
 from unittest import TestCase
 from unittest.mock import MagicMock, patch
 
-from ...utils import today, yesterday
+from ...utils import yesterday, today, tomorrow
 from imopay_wrapper.models.transaction import (
     BaseConfiguration,
     InterestConfiguration,
@@ -204,7 +204,7 @@ class DiscountConfigurationTestCase(TestCase):
         Então:
             - N/A
         """
-        valid_values = [today(), yesterday()]
+        valid_values = [today(), tomorrow()]
 
         instance = MagicMock()
 
@@ -220,9 +220,9 @@ class DiscountConfigurationTestCase(TestCase):
             - um mapeamento invalid_values_by_error de vários erros para
                 listas de valores inválidos
                 {
-                    FieldError: ['-1', 0],
-                    TypeError: [[], None, {}],
-                    ValueError: ['a']
+                    FieldError: [yesterday()],
+                    ValueError: ["-1", "a"],
+                    TypeError: [0, {}, [], None],
                 }
             - uma instância qualquer
         Quando:
@@ -232,6 +232,7 @@ class DiscountConfigurationTestCase(TestCase):
             - deve ser lançado o erro específico para cada valor
         """
         invalid_values_by_error = {
+            FieldError: [yesterday()],
             ValueError: ["-1", "a"],
             TypeError: [0, {}, [], None],
         }

@@ -62,7 +62,7 @@ class DiscountConfiguration(FineConfiguration):
     date: str
 
     def _validate_date(self):
-        validate_date_isoformat(self, "date", past=True, allow_today=True)
+        validate_date_isoformat(self, "date", future=True, allow_today=True)
 
 
 @dataclass
