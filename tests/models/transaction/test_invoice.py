@@ -162,7 +162,7 @@ class InvoiceTestCase(TestCase):
                     {
                         "value": 1,
                         "charge_type": BaseConfiguration.FIXED,
-                        "date": "2020-08-28",
+                        "date": today(),
                     }
                 ],
             }
