@@ -12,7 +12,7 @@ class BankAccount(BaseImopayObj):
     routing: str
     type: str
 
-    VALID_TYPES = {'poupança', 'corrente'}
+    VALID_TYPES = {"poupança", "corrente"}
 
     def _validate_type(self):
         validate_obj_attr_in_collection(self, "type", self.VALID_TYPES)
