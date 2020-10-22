@@ -15,7 +15,7 @@ class BankAccountWrapperTestCase(LocalImopayTestCase):
         Quando:
             - N/A
         Então:
-            - client deve ser uma instância de (CreateMixin, RetrieveMixin, DestroyMixin)
+            - client deve ser uma instância de (CreateMixin, RetrieveMixin, DestroyMixin)  # noqa
         """
         self.assertIsInstance(self.client, (CreateMixin, RetrieveMixin, DestroyMixin))
 
