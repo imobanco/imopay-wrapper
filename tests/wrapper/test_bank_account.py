@@ -25,9 +25,7 @@ class BankAccountWrapperTestCase(LocalImopayTestCase):
         """
         mixins = (CreateMixin, RetrieveMixin, DestroyMixin, GetByDocumentMixin)
         for mixin in mixins:
-            self.assertIsInstance(
-                self.client, mixin
-            )
+            self.assertIsInstance(self.client, mixin)
 
     def test_model(self):
         """
