@@ -1,6 +1,11 @@
 from ..utils import LocalImopayTestCase
 from imopay_wrapper import ImopayWrapper
-from imopay_wrapper.wrapper.base import CreateMixin, RetrieveMixin, DestroyMixin
+from imopay_wrapper.wrapper.base import (
+    CreateMixin,
+    RetrieveMixin,
+    DestroyMixin,
+    GetByDocumentMixin,
+)
 from imopay_wrapper.models.bank_account import BankAccount
 
 
@@ -15,9 +20,14 @@ class BankAccountWrapperTestCase(LocalImopayTestCase):
         Quando:
             - N/A
         Então:
-            - client deve ser uma instância de (CreateMixin, RetrieveMixin, DestroyMixin)  # noqa
+            - client deve ser uma instância de
+                CreateMixin, RetrieveMixin, DestroyMixin, GetByDocumentMixin
         """
-        self.assertIsInstance(self.client, (CreateMixin, RetrieveMixin, DestroyMixin))
+        mixins = (CreateMixin, RetrieveMixin, DestroyMixin, GetByDocumentMixin)
+        for mixin in mixins:
+            self.assertIsInstance(
+                self.client, mixin
+            )
 
     def test_model(self):
         """
