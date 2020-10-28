@@ -2,12 +2,31 @@ from unittest.mock import patch, PropertyMock
 
 from ..utils import LocalImopayTestCase
 from imopay_wrapper import ImopayWrapper
+from imopay_wrapper.wrapper.base import (
+    CreateMixin,
+    RetrieveMixin,
+    GetByDocumentMixin,
+)
 from imopay_wrapper.models.address import Address
 
 
 class AddressWrapperTestCase(LocalImopayTestCase):
     def setUp(self):
         self.client = ImopayWrapper().address
+
+    def test_mixins(self):
+        """
+        Dado:
+            - um client ImopayWrapper().address
+        Quando:
+            - N/A
+        Então:
+            - client deve ser uma instância de
+                CreateMixin, RetrieveMixin, DestroyMixin, GetByDocumentMixin
+        """
+        mixins = (CreateMixin, RetrieveMixin, GetByDocumentMixin)
+        for mixin in mixins:
+            self.assertIsInstance(self.client, mixin)
 
     def test_model(self):
         self.assertEqual(self.client.model, Address)

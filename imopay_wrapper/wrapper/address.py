@@ -1,8 +1,16 @@
-from .base import BaseImopayWrapper, CreateMixin, UpdateMixin, RetrieveMixin
+from .base import (
+    BaseImopayWrapper,
+    CreateMixin,
+    UpdateMixin,
+    RetrieveMixin,
+    GetByDocumentMixin,
+)
 from ..models.address import Address
 
 
-class AddressWrapper(BaseImopayWrapper, CreateMixin, UpdateMixin, RetrieveMixin):
+class AddressWrapper(
+    BaseImopayWrapper, CreateMixin, UpdateMixin, RetrieveMixin, GetByDocumentMixin
+):
     """
     Wrapper para os métodos de address
     """
@@ -26,8 +34,3 @@ class AddressWrapper(BaseImopayWrapper, CreateMixin, UpdateMixin, RetrieveMixin)
             action=self.action, subaction="update_by_name_and_uf", identifier=identifier
         )
         return self._patch(url, instance.to_dict())
-
-    def get_by_document(self, document):
-        data = {"cpf_cnpj": document}
-        url = self._construct_url(action=self.action, subaction="get_by_document")
-        return self._post(url, data)
