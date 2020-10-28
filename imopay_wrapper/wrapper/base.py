@@ -258,3 +258,10 @@ class DestroyMixin:
     def destroy(self, identifier: str):
         url = self._construct_url(action=self.action, identifier=identifier)
         return self._delete(url)
+
+
+class GetByDocumentMixin:
+    def get_by_document(self, document: str):
+        data = {"cpf_cnpj": document}
+        url = self._construct_url(action=self.action, subaction="get_by_document")
+        return self._post(url, data)
