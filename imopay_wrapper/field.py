@@ -8,7 +8,9 @@ class ImopayField(Field):
 
         self.optional = opitional
 
-        super().__init__(default, default_factory, init, repr, hash, compare, metadata,  kw_only=False)
+        super().__init__(
+            default, default_factory, init, repr, hash, compare, metadata, kw_only=False
+        )
 
 
 # This function is used instead of exposing Field creation directly,
